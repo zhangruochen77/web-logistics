@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="logistics-admin" />
+        <module name="logistics-cmn" />
+        <module name="logistics-car" />
+        <module name="logistics-config" />
+        <module name="logistics-order" />
+        <module name="logistics-model" />
+        <module name="logistics-gateway" />
+        <module name="logistics-warehouse" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="logistics-admin" target="1.8" />
+      <module name="logistics-car" target="1.8" />
+      <module name="logistics-cmn" target="1.8" />
+      <module name="logistics-common" target="1.8" />
+      <module name="logistics-config" target="1.8" />
+      <module name="logistics-gateway" target="1.8" />
+      <module name="logistics-model" target="1.8" />
+      <module name="logistics-order" target="1.8" />
+      <module name="logistics-service" target="1.8" />
+      <module name="logistics-warehouse" target="1.8" />
+      <module name="logsitics-parent" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="logistics-admin" options="-parameters" />
+      <module name="logistics-car" options="-parameters" />
+      <module name="logistics-cmn" options="-parameters" />
+      <module name="logistics-config" options="-parameters" />
+      <module name="logistics-gateway" options="-parameters" />
+      <module name="logistics-model" options="-parameters" />
+      <module name="logistics-order" options="-parameters" />
+      <module name="logistics-warehouse" options="-parameters" />
+    </option>
+  </component>
+</project>

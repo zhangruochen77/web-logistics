@@ -1,0 +1,4 @@
+# Project exclude paths
+/logsitics-parent/logistics-common/logistics-config/target/
+/logsitics-parent/logistics-model/target/
+/logsitics-parent/logistics-service/logistics-cmn/target/

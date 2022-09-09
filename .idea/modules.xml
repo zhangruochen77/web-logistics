@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-admin/logistics-admin.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-admin/logistics-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-car/logistics-car.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-car/logistics-car.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-cmn/logistics-cmn.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-cmn/logistics-cmn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-common.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-config/logistics-config.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-config/logistics-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-gateway/logistics-gateway.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-gateway/logistics-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-model/logistics-model.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-model/logistics-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-order/logistics-order.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-order/logistics-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-service.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-warehouse/logistics-warehouse.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-warehouse/logistics-warehouse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logsitics-parent.iml" filepath="$PROJECT_DIR$/logsitics-parent/logsitics-parent.iml" />
+    </modules>
+  </component>
+</project>
