@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-model/logistics-model.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-model/logistics-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-order/logistics-order.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-order/logistics-order.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-service.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-utils/logistics-utils.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-utils/logistics-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-warehouse/logistics-warehouse.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-warehouse/logistics-warehouse.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logsitics-parent.iml" filepath="$PROJECT_DIR$/logsitics-parent/logsitics-parent.iml" />
     </modules>

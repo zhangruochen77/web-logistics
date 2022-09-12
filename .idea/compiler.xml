@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="logistics-utils" />
         <module name="logistics-admin" />
-        <module name="logistics-cmn" />
-        <module name="logistics-car" />
-        <module name="logistics-config" />
-        <module name="logistics-order" />
         <module name="logistics-model" />
+        <module name="logistics-config" />
+        <module name="logistics-car" />
+        <module name="logistics-order" />
+        <module name="logistics-cmn" />
         <module name="logistics-gateway" />
         <module name="logistics-warehouse" />
       </profile>
@@ -27,6 +28,7 @@
       <module name="logistics-model" target="1.8" />
       <module name="logistics-order" target="1.8" />
       <module name="logistics-service" target="1.8" />
+      <module name="logistics-utils" target="1.8" />
       <module name="logistics-warehouse" target="1.8" />
       <module name="logsitics-parent" target="1.8" />
     </bytecodeTargetLevel>
@@ -40,6 +42,7 @@
       <module name="logistics-gateway" options="-parameters" />
       <module name="logistics-model" options="-parameters" />
       <module name="logistics-order" options="-parameters" />
+      <module name="logistics-utils" options="-parameters" />
       <module name="logistics-warehouse" options="-parameters" />
     </option>
   </component>

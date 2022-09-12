@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-config/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-utils/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/logsitics-parent/logistics-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/logsitics-parent/logistics-model/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-admin/src/main/java" charset="UTF-8" />

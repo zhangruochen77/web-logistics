@@ -35,4 +35,9 @@ public class Admin extends Base {
      */
     private String img;
 
+    /**
+     * 手机号码
+     */
+    private String phone;
+
 }

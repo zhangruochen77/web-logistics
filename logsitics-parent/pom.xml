@@ -13,6 +13,7 @@
         <module>logistics-model</module>
         <module>logistics-service</module>
         <module>logistics-gateway</module>
+        <module>logistics-common/logistics-utils</module>
     </modules>
 
     <!-- 所继承的父项目 spring-boot 起步依赖 -->
