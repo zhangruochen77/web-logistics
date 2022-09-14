@@ -7,19 +7,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="logistics-utils" />
+        <module name="logistics-api" />
         <module name="logistics-admin" />
-        <module name="logistics-model" />
-        <module name="logistics-config" />
-        <module name="logistics-car" />
-        <module name="logistics-order" />
         <module name="logistics-cmn" />
+        <module name="logistics-car" />
+        <module name="logistics-config" />
+        <module name="logistics-utils" />
+        <module name="logistics-order" />
+        <module name="logistics-model" />
         <module name="logistics-gateway" />
         <module name="logistics-warehouse" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="logistics-admin" target="1.8" />
+      <module name="logistics-api" target="1.8" />
       <module name="logistics-car" target="1.8" />
       <module name="logistics-cmn" target="1.8" />
       <module name="logistics-common" target="1.8" />
@@ -36,6 +38,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="logistics-admin" options="-parameters" />
+      <module name="logistics-api" options="-parameters" />
       <module name="logistics-car" options="-parameters" />
       <module name="logistics-cmn" options="-parameters" />
       <module name="logistics-config" options="-parameters" />

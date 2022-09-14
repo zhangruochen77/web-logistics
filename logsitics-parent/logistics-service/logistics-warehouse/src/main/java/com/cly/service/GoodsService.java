@@ -1,8 +1,8 @@
 package com.cly.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cly.pojo.warehouse.Goods;
 import com.cly.vo.warehouse.GoodsQueryVo;
+import com.cly.vo.warehouse.GoodsSelectVo;
 import com.cly.vo.warehouse.GoodsVo;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface GoodsService {
      * @param goodsQueryVo
      * @return
      */
-    IPage<Goods> pageFind(int page, int limit, GoodsQueryVo goodsQueryVo);
+    Map<String, Object> pageFind(int page, int limit, GoodsQueryVo goodsQueryVo);
 
     /**
      * 添加新商品
@@ -41,7 +41,7 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    Goods getById(Long id);
+    GoodsSelectVo getById(Long id);
 
     /**
      * 新进货物 修改信息
@@ -82,4 +82,9 @@ public interface GoodsService {
      * @return
      */
     Map<Long, Goods> searchByIds(List<Long> goodsIds);
+
+    /**
+     * 更新商品上架状态
+     */
+    void updateState(Long id, Integer state);
 }

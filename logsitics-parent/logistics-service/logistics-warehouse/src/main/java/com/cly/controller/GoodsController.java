@@ -73,6 +73,19 @@ public class GoodsController {
         return Result.success();
     }
 
+    /**
+     * 更新商品是否上架状态
+     *
+     * @param state
+     * @return
+     */
+    @PutMapping("/updateState/${id}/${state}")
+    public Result updateState(@PathVariable("id") Long id,
+                              @PathVariable("state") Integer state) {
+        goodsService.updateState(id, state);
+        return Result.success();
+    }
+
 
     /**
      * 单个删除操作

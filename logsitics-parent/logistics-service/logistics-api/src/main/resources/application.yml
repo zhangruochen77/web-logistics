@@ -1,0 +1,24 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: logistics-api
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.195.130
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/logistics_api?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: "031500"
+  servlet:
+    multipart:
+      max-file-size: 100MB  # 设置文件所能经过的最大数量
+      max-request-size: 100MB  # 设置请求所能经过的最大请求量
+
+# 七牛云密钥
+qiniu:
+  accessKey: 0e7dyZOoNyOiIYbCZZpmmbcfE-rWd105c9sZ9TVG
+  accessSecretKey: TNBFLL3twMSUoKuI-o6YmpJoG6cxtVBXeNV7exlT

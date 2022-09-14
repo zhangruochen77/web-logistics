@@ -11,5 +11,9 @@
 
     <artifactId>logistics-warehouse</artifactId>
 
+    <dependencies>
+
+    </dependencies>
+
 
 </project>

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-admin/logistics-admin.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-admin/logistics-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-api/logistics-api.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-api/logistics-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-car/logistics-car.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-car/logistics-car.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-cmn/logistics-cmn.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-service/logistics-cmn/logistics-cmn.iml" />
       <module fileurl="file://$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-common.iml" filepath="$PROJECT_DIR$/logsitics-parent/logistics-common/logistics-common.iml" />

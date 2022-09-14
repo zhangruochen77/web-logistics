@@ -50,4 +50,9 @@ public class Goods extends Base {
      */
     private String description;
 
+    /**
+     * 货物状态
+     */
+    private int state;
+
 }

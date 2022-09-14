@@ -1,0 +1,38 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: logistics-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.195.130:8848
+
+    gateway:
+      enabled: true # 启用网关功能
+      routes:
+        - id: logistics-cmn
+          uri: lb://logistics-cmn  # lb 做负载均衡
+          predicates:
+            - Path=/*/cmn/**
+        - id: logistics-warehouse
+          uri: lb://logistics-warehouse
+          predicates:
+            - Path=/*/warehouse/**
+        - id: logistics-admin
+          uri: lb://logistics-admin
+          predicates:
+            - Path=/*/admin/**
+        - id: logistics-car
+          uri: lb://logistics-car
+          predicates:
+            - Path=/*/car/**
+        - id: logistics-order
+          uri: lb://logistics-order
+          predicates:
+            - Path=/*/order/**
+        - id: logistics-api
+          uri: lb://logistics-api
+          predicates:
+            - Path=/*/api/**

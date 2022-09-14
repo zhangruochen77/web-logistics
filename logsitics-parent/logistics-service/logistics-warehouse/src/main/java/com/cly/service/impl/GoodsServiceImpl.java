@@ -9,6 +9,7 @@ import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
 import com.cly.service.InOrderService;
 import com.cly.vo.warehouse.GoodsQueryVo;
+import com.cly.vo.warehouse.GoodsSelectVo;
 import com.cly.vo.warehouse.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +36,7 @@ public class GoodsServiceImpl extends
      * @return
      */
     @Override
-    public IPage<Goods> pageFind(int page, int limit, GoodsQueryVo goodsQueryVo) {
+    public Map<String, Object> pageFind(int page, int limit, GoodsQueryVo goodsQueryVo) {
 
         LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper();
 
@@ -73,8 +71,13 @@ public class GoodsServiceImpl extends
         IPage iPage = new Page(page, limit);
         IPage<Goods> goodsIPage = baseMapper.selectPage(iPage, wrapper);
 
-        return goodsIPage;
+        Map<String, Object> data = new HashMap<>(4);
+        List<GoodsSelectVo> records = goodsToSelectVo(goodsIPage.getRecords());
+        data.put("records", records);
+        data.put("total", goodsIPage.getTotal());
+        return data;
     }
+
 
     /**
      * 添加新商品
@@ -85,6 +88,7 @@ public class GoodsServiceImpl extends
     public void addGoods(GoodsVo goodsVo) {
         Goods goods = voParseGoods(goodsVo);
         goods.setNumber(0);
+        goods.setState(1);
         baseMapper.insert(goods);
     }
 
@@ -105,8 +109,8 @@ public class GoodsServiceImpl extends
      * @return
      */
     @Override
-    public Goods getById(Long id) {
-        return baseMapper.selectById(id);
+    public GoodsSelectVo getById(Long id) {
+        return goodsToVo(baseMapper.selectById(id));
     }
 
     /**
@@ -212,6 +216,53 @@ public class GoodsServiceImpl extends
         }
 
         return map;
+    }
+
+    /**
+     * 更新商品上架状态
+     */
+    @Override
+    public void updateState(Long id, Integer state) {
+        Goods goods = new Goods();
+        goods.setId(id);
+        goods.setState(state);
+        baseMapper.updateById(goods);
+    }
+
+
+    /**
+     * 转换 goods 对象为 vo 集合
+     *
+     * @param records
+     * @return
+     */
+    private List<GoodsSelectVo> goodsToSelectVo(List<Goods> records) {
+        List<GoodsSelectVo> list = new ArrayList<>(records.size());
+        records.forEach(g -> list.add(goodsToVo(g)));
+        return list;
+    }
+
+
+    /**
+     * 转换 goods 对象为 select vo
+     *
+     * @param g
+     * @return
+     */
+    private GoodsSelectVo goodsToVo(Goods g) {
+        GoodsSelectVo v = new GoodsSelectVo();
+        v.setId(g.getId().toString());
+        v.setProvince(g.getProvince().toString());
+        v.setCity(g.getCity().toString());
+        v.setCounty(g.getCounty().toString());
+        v.setName(g.getName());
+        v.setNumber(g.getNumber());
+        v.setPrice(g.getPrice());
+        v.setImg(g.getImg());
+        v.setDescription(g.getDescription());
+        v.setState(v.getState());
+
+        return v;
     }
 
     /**
