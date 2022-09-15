@@ -40,4 +40,9 @@ public class Admin extends Base {
      */
     private String phone;
 
+    /**
+     * 用户状态
+     */
+    private Integer state;
+
 }

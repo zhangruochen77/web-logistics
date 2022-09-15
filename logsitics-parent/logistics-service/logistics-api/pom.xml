@@ -18,6 +18,12 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>[7.7.0, 7.7.99]</version>
         </dependency>
+        <!-- 容联云依赖 -->
+        <dependency>
+            <groupId>com.cloopen</groupId>
+            <artifactId>java-sms-sdk</artifactId>
+            <version>1.0.3</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -10,15 +10,25 @@ spring:
         server-addr: 192.168.195.130
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/logistics_api?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/logistics_admin?characterEncoding=utf-8&useSSL=false
     username: root
     password: "031500"
   servlet:
     multipart:
       max-file-size: 100MB  # 设置文件所能经过的最大数量
       max-request-size: 100MB  # 设置请求所能经过的最大请求量
+  redis:
+    host: 192.168.195.130
+    port: 6379
 
 # 七牛云密钥
 qiniu:
   accessKey: 0e7dyZOoNyOiIYbCZZpmmbcfE-rWd105c9sZ9TVG
   accessSecretKey: TNBFLL3twMSUoKuI-o6YmpJoG6cxtVBXeNV7exlT
+# 容联云密钥
+cloopen:
+  serverIp: app.cloopen.com
+  serverPort: 8883
+  appId: 8aaf070882ede8b301832a26bb000b21  # 管理控制台中的 appId
+  accountSId: 8aaf070882ede8b301832a26ba0f0b1a # 开发者id
+  accountToken: 850b190e300249c7bd7db62af74dda54 # 开发者密钥

@@ -38,11 +38,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return JSONObject.parseObject(r.toString(), Role.class);
         }
 
-        // mysql 查询 处理数据放入 redis 默认存放一天
+        // mysql 查询 处理数据放入 redis
         Role role = baseMapper.selectById(id);
         if (!ObjectUtils.isEmpty(role)) {
             String value = JSONObject.toJSONString(role);
-            redisTemplate.opsForValue().set(key, value, 1L, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(key, value);
             return role;
         }
 

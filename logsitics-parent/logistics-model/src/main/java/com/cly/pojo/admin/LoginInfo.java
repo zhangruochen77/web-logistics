@@ -1,12 +1,14 @@
 package com.cly.pojo.admin;
 
 import com.cly.pojo.base.Base;
+import lombok.Data;
 
 import java.util.Date;
 
 /**
  * 登录信息记录表
  */
+@Data
 public class LoginInfo extends Base {
 
     /**

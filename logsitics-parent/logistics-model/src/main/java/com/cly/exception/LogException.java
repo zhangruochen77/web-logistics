@@ -12,4 +12,8 @@ public class LogException extends RuntimeException {
     public LogException(String message) {
         super(message);
     }
+
+    public LogException(Integer code, String message) {
+        super(message);
+    }
 }
