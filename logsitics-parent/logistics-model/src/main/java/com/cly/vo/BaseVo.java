@@ -1,5 +1,6 @@
 package com.cly.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**

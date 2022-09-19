@@ -3,7 +3,8 @@ package com.cly.web.param;
 import lombok.Data;
 
 @Data
-public class UpdatePasswordByPhoneParams {
+public class
+UpdatePasswordByPhoneParams {
 
     /**
      * 手机号码

@@ -58,7 +58,7 @@ public class CountyServiceImpl extends ServiceImpl<CountyMapper, County> impleme
     public List<County> getCountiesByParentId(Long parentId) {
 
         // redis
-        String key = "log:cmn:counties";
+        String key = "log:cmn:counties:" + parentId;
         Object redisCounties = redisTemplate.opsForValue().get(key);
         if (!ObjectUtils.isEmpty(redisCounties)) {
             return JSONObject.parseObject(redisCounties.toString(), List.class);

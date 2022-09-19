@@ -3,6 +3,7 @@ package com.cly.service.impl;
 import com.cloopen.rest.sdk.BodyType;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.cly.service.CodeService;
+import com.cly.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -59,7 +60,7 @@ public class CodeServiceImpl implements CodeService {
      * @return
      */
     @Override
-    public String createCode(String phone) {
+    public Result createCode(String phone) {
 
         Object codeObj = redisTemplate.opsForValue().get(phone);
 
@@ -69,7 +70,7 @@ public class CodeServiceImpl implements CodeService {
 //            if (reSetTime > expire) {
 //
 //            }
-            return "操作太过于频繁";
+            return Result.success(300, "操作太过于频繁");
         }
 
         String code = createRandomCode();
@@ -97,7 +98,7 @@ public class CodeServiceImpl implements CodeService {
             System.out.println("错误码 = " + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
         }
 
-        return "验证码已经发送,请注意查收！";
+        return Result.success(200, "验证码已经发送,请注意查收！");
     }
 
     /**

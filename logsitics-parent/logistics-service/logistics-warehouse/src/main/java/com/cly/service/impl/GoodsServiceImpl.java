@@ -5,12 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cly.dao.GoodsMapper;
+import com.cly.feign.WarehouseCmnFeign;
 import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
 import com.cly.service.InOrderService;
-import com.cly.vo.warehouse.GoodsQueryVo;
-import com.cly.vo.warehouse.GoodsSelectVo;
-import com.cly.vo.warehouse.GoodsVo;
+import com.cly.vo.warehouse.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +25,9 @@ public class GoodsServiceImpl extends
 
     @Autowired
     private InOrderService inOrderService;
+
+    @Autowired
+    private WarehouseCmnFeign warehouseCmnFeign;
 
     /**
      * 分页查询商品
@@ -103,14 +105,53 @@ public class GoodsServiceImpl extends
     }
 
     /**
-     * 获取商品
+     * 获取商品 远程调用 cmn 获取省 城市 区县信息
      *
      * @param id
      * @return
      */
     @Override
-    public GoodsSelectVo getById(Long id) {
-        return goodsToVo(baseMapper.selectById(id));
+    public GoodsInfoVo getById(Long id) {
+        Goods goods = baseMapper.selectById(id);
+        if (ObjectUtils.isEmpty(goods)) {
+            return null;
+        }
+
+        // 远程调用
+        Map<String, String> provinceMap = (Map<String, String>) warehouseCmnFeign
+                .getProvinceById(goods.getProvince()).getData();
+        Map<String, String> cityMap = (Map<String, String>) warehouseCmnFeign
+                .getCityById(goods.getCity()).getData();
+        Map<String, String> countyMap = (Map<String, String>) warehouseCmnFeign
+                .getCountyById(goods.getCounty()).getData();
+        String province = provinceMap.get("value");
+        String city = cityMap.get("value");
+        String county = countyMap.get("value");
+
+        StringBuilder builder = new StringBuilder(province.length() + city.length() + county.length());
+        String address = builder.append(province).append(city).append(county).toString();
+
+        return goodsToGoodsInfoVo(goods, address);
+    }
+
+    /**
+     * 转换 goods 对象为单个展示对象
+     *
+     * @param goods
+     * @param address
+     * @return
+     */
+    private GoodsInfoVo goodsToGoodsInfoVo(Goods goods, String address) {
+        GoodsInfoVo vo = new GoodsInfoVo();
+        vo.setId(goods.getId().toString());
+        vo.setName(goods.getName());
+        vo.setNumber(goods.getNumber());
+        vo.setPrice(goods.getPrice());
+        vo.setImg(goods.getImg());
+        vo.setDescription(goods.getDescription());
+        vo.setState(goods.getState());
+        vo.setAddress(address);
+        return vo;
     }
 
     /**
@@ -231,6 +272,22 @@ public class GoodsServiceImpl extends
 
 
     /**
+     * 获取所有商品的 id name
+     *
+     * @return
+     */
+    @Override
+    public List<GoodsIdNameVo> listGoods() {
+        List<Goods> goods = baseMapper.selectList(new LambdaQueryWrapper<Goods>().select(Goods::getId, Goods::getName));
+
+        List<GoodsIdNameVo> list = new ArrayList<>(goods.size());
+        goods.parallelStream().forEach(g -> list.add(
+                new GoodsIdNameVo(g.getId().toString(), g.getName())));
+        return list;
+    }
+
+
+    /**
      * 转换 goods 对象为 vo 集合
      *
      * @param records
@@ -238,7 +295,7 @@ public class GoodsServiceImpl extends
      */
     private List<GoodsSelectVo> goodsToSelectVo(List<Goods> records) {
         List<GoodsSelectVo> list = new ArrayList<>(records.size());
-        records.forEach(g -> list.add(goodsToVo(g)));
+        records.parallelStream().forEach(g -> list.add(goodsToVo(g)));
         return list;
     }
 
@@ -260,7 +317,7 @@ public class GoodsServiceImpl extends
         v.setPrice(g.getPrice());
         v.setImg(g.getImg());
         v.setDescription(g.getDescription());
-        v.setState(v.getState());
+        v.setState(g.getState());
 
         return v;
     }

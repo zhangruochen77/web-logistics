@@ -1,5 +1,7 @@
 package com.cly.service;
 
+import com.cly.web.Result;
+
 public interface CodeService {
 
     /**
@@ -7,6 +9,6 @@ public interface CodeService {
      *
      * @return
      */
-    String createCode(String phone);
+    Result createCode(String phone);
 
 }

@@ -2,6 +2,7 @@ package com.cly.service;
 
 import com.cly.vo.warehouse.InOrderQueryVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface InOrderService {
@@ -53,4 +54,22 @@ public interface InOrderService {
      * @param ids
      */
     void deleteByGoodsIds(Long[] ids);
+
+    /**
+     * 条件查询生成订单表
+     *
+     * @param vo
+     * @param response
+     */
+    void exportInOrder(InOrderQueryVo vo, HttpServletResponse response);
+
+    /**
+     * 条件查询生成当前页订单表
+     *
+     * @param page
+     * @param limit
+     * @param vo
+     * @param response
+     */
+    void exportCurrentInOrder(Integer page, Integer limit, InOrderQueryVo vo, HttpServletResponse response);
 }

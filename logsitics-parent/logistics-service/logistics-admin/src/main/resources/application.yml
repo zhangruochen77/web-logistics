@@ -1,5 +1,6 @@
 server:
   port: 8081
+
 spring:
   application:
     name: logistics-admin
@@ -15,3 +16,10 @@ spring:
   redis:
     host: 192.168.195.130
     port: 6379
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: t_  # 设置表前缀
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

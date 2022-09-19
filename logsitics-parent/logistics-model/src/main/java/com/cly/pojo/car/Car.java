@@ -15,7 +15,7 @@ public class Car extends Base {
     /**
      * 车牌号码
      */
-    private Long carId;
+    private String carId;
 
     /**
      * 配送员 id
@@ -30,6 +30,11 @@ public class Car extends Base {
     /**
      * 开始使用时间
      */
-    private Date useTime;
+    private Date startUseTime;
+
+    /**
+     * 车辆状态 1 表示使用 0 表示处于维修状态当中
+     */
+    private Integer state;
 
 }

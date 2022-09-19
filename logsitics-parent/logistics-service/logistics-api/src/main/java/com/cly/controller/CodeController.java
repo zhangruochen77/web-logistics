@@ -17,8 +17,7 @@ public class CodeController {
 
     @GetMapping("createCode/{phone}")
     public Result createCode(@PathVariable("phone") String phone) {
-        String msg = codeService.createCode(phone);
-        return Result.success(200, msg);
+        return codeService.createCode(phone);
     }
 
 }

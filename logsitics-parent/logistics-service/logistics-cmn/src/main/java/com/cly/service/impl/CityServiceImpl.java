@@ -58,7 +58,7 @@ public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements Ci
     public List<City> getAllCitiesByParentId(Long parentId) {
 
         // redis 查询
-        String key = "log:cmn:cities";
+        String key = "log:cmn:cities:" + parentId;
         Object cs = redisTemplate.opsForValue().get(key);
         if (!ObjectUtils.isEmpty(cs)) {
             return JSONObject.parseObject(cs.toString(), List.class);

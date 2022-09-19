@@ -6,6 +6,7 @@ import com.cly.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
@@ -29,6 +30,34 @@ public class InOrderController {
                            @RequestBody InOrderQueryVo vo) {
         Map<String, Object> res = inOrderService.pageFind(page, limit, vo);
         return Result.success(res);
+    }
+
+    /**
+     * 条件查询生成订单表 excel
+     *
+     * @param vo
+     * @param response
+     */
+    @PostMapping("/exportInOrder")
+    public void exportInOrder(@RequestBody InOrderQueryVo vo,
+                              HttpServletResponse response) {
+        inOrderService.exportInOrder(vo, response);
+    }
+
+    /**
+     * 条件查询下仅导出当前页订单表
+     *
+     * @param page
+     * @param limit
+     * @param vo
+     * @param response
+     */
+    @PostMapping("/exportCurrentInOrder/{page}/{limit}")
+    public void exportCurrentInOrder(@PathVariable("page") Integer page,
+                                     @PathVariable("limit") Integer limit,
+                                     @RequestBody InOrderQueryVo vo,
+                                     HttpServletResponse response) {
+        inOrderService.exportCurrentInOrder(page, limit, vo, response);
     }
 
     /**

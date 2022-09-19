@@ -1,10 +1,15 @@
 package com.cly.service;
 
 import com.cly.pojo.admin.Admin;
+import com.cly.vo.admin.AdminInfoParams;
+import com.cly.vo.admin.AdminVo;
 import com.cly.web.param.PasswordParams;
 import com.cly.web.param.PhoneParams;
 import com.cly.web.param.UpdatePasswordByPassParams;
 import com.cly.web.param.UpdatePasswordByPhoneParams;
+
+import java.util.List;
+import java.util.Map;
 
 public interface AdminService {
 
@@ -56,4 +61,39 @@ public interface AdminService {
      * @return
      */
     boolean deleteAdmin(Long adminId, String token);
+
+    /**
+     * 多个 id 查询用户
+     *
+     * @param adminIds
+     * @return
+     */
+    Map<Long, String> listAdminByArray(Long[] adminIds);
+
+    /**
+     * 获取用户通过 角色 id
+     *
+     * @return
+     */
+    List<Admin> listAdminByRoleId(Long roleId);
+
+    /**
+     * 获取个人信息
+     *
+     * @return
+     */
+    AdminVo getAdmin();
+
+    /**
+     * 退出登录
+     */
+    void logOut();
+
+    /**
+     * 更新用户个人信息
+     *
+     * @param params
+     * @return
+     */
+    boolean updateInfo(AdminInfoParams params);
 }

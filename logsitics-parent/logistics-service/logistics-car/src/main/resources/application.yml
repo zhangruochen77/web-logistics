@@ -1,0 +1,25 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: logistics-car
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: "031500"
+    url: jdbc:mysql://localhost:3306/logistics_warehouse?characterEncoding=utf-8&useSSL=false
+  redis:
+    port: 6379
+    host: 192.168.195.130
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.195.130
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: t_

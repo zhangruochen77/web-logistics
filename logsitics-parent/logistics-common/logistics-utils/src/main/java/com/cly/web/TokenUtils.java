@@ -17,7 +17,7 @@ public class TokenUtils {
     /**
      * 加密密钥
      */
-    private static final String SECRET = "jjwhxcndba";
+    private static final String SECRET = "qadjjwhxcndba";
 
     /**
      * 过期时间 30 分钟

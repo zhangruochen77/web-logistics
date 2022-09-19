@@ -9,7 +9,11 @@ import com.cly.pojo.admin.Admin;
 import com.cly.pojo.cmn.Role;
 import com.cly.service.AdminService;
 import com.cly.service.LoginInfoService;
+import com.cly.vo.admin.AdminInfoParams;
+import com.cly.vo.admin.AdminVo;
 import com.cly.web.MD5Util;
+import com.cly.web.RedisKeyUtils;
+import com.cly.web.ThreadLocalAdminUtils;
 import com.cly.web.TokenUtils;
 import com.cly.web.param.PasswordParams;
 import com.cly.web.param.PhoneParams;
@@ -21,7 +25,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
@@ -60,7 +69,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         admin.setImg(null);
 
         String token = TokenUtils.createToken(admin.getId(), admin.getUsername());
-        redisTemplate.opsForValue().set("admin:" + admin.getId(),
+        redisTemplate.opsForValue().set(RedisKeyUtils.createAdminKey(admin.getId()),
                 JSONObject.toJSONString(admin), 30L, TimeUnit.MINUTES);
 
         doLoginLog(admin, false);
@@ -102,7 +111,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         admin.setImg(null);
 
         String token = TokenUtils.createToken(admin.getId(), admin.getUsername());
-        redisTemplate.opsForValue().set("admin:" + admin.getId(),
+        redisTemplate.opsForValue().set(RedisKeyUtils.createAdminKey(admin.getId()),
                 JSONObject.toJSONString(admin), 30L, TimeUnit.MINUTES);
 
         doLoginLog(admin, true);
@@ -155,7 +164,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             throw new LogException("验证码已过期");
         }
 
-        if (!redisCode.equals(params)) {
+        if (!redisCode.equals(params.getCode())) {
             throw new LogException("验证码不匹配");
         }
 
@@ -183,7 +192,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             throw new LogException(601, "账户登录已过期");
         }
 
-        Object redisRoot = redisTemplate.opsForValue().get("admin:" + rootId);
+        Object redisRoot = redisTemplate.opsForValue().get(RedisKeyUtils.createAdminKey(rootId));
         Admin root = JSONObject.parseObject(redisRoot.toString(), Admin.class);
         Object redisRole = redisTemplate.opsForValue().get("log:cmn:role:" + root.getRoleId());
         Role role = JSONObject.parseObject(redisRole.toString(), Role.class);
@@ -211,7 +220,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             throw new LogException(601, "账户登录已过期");
         }
 
-        Object redisRoot = redisTemplate.opsForValue().get("admin:" + rootId);
+        Object redisRoot = redisTemplate.opsForValue().get(RedisKeyUtils.createAdminKey(rootId));
         Admin root = JSONObject.parseObject(redisRoot.toString(), Admin.class);
         Object redisRole = redisTemplate.opsForValue().get("log:cmn:role:" + root.getRoleId());
         Role role = JSONObject.parseObject(redisRole.toString(), Role.class);
@@ -222,6 +231,115 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         return baseMapper.deleteById(adminId) == 1;
 
     }
+
+    /**
+     * 多个 id 查询用户
+     *
+     * @param adminIds
+     * @return
+     */
+    @Override
+    public Map<Long, String> listAdminByArray(Long[] adminIds) {
+        List<Admin> res = baseMapper.selectBatchIds(Arrays.stream(adminIds).collect(Collectors.toList()));
+        Map<Long, String> admins = new HashMap<>(res.size() << 1);
+        res.forEach(a -> admins.put(a.getId(), a.getUsername()));
+
+        return admins;
+    }
+
+    /**
+     * 获取用户通过 角色 id
+     *
+     * @return
+     */
+    @Override
+    public List<Admin> listAdminByRoleId(Long roleId) {
+        return baseMapper.selectList(new LambdaQueryWrapper<Admin>()
+                .eq(Admin::getRoleId, roleId)
+                .eq(Admin::getState, 1)
+                .select(Admin::getId, Admin::getName, Admin::getUsername));
+    }
+
+    /**
+     * 获取个人信息 从 threadLocal 中获取 token token 再获取 id 值进行查询
+     *
+     * @return
+     */
+    @Override
+    public AdminVo getAdmin() {
+        String token = ThreadLocalAdminUtils.get();
+        Long id = TokenUtils.getId(token);
+        Admin admin = baseMapper.selectById(id);
+        return adminToAdminVo(admin);
+    }
+
+    /**
+     * 退出登录
+     */
+    @Override
+    public void logOut() {
+        String token = ThreadLocalAdminUtils.get();
+        Long id = TokenUtils.getId(token);
+        redisTemplate.opsForValue().getOperations().delete(RedisKeyUtils.createAdminKey(id));
+    }
+
+    /**
+     * 更新用户个人信息
+     * 是为自己的信息的时候才能修改成功
+     * 不是自己的信息不能修改成功
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public boolean updateInfo(AdminInfoParams params) {
+        Long tokenId = TokenUtils.getId(ThreadLocalAdminUtils.get());
+        if (ObjectUtils.isEmpty(params)) {
+            throw new LogException("更新信息为空！");
+        }
+
+        // 当用户操作的 id 是个人自己时，才能够进行修改
+        if (tokenId.equals(params.getId())) {
+            baseMapper.updateById(adminInfoParamsToAdmin(params));
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 转化个人信息参数对象为 admin 对象
+     *
+     * @param params
+     * @return
+     */
+    private Admin adminInfoParamsToAdmin(AdminInfoParams params) {
+        Admin admin = new Admin();
+        admin.setId(params.getId());
+        admin.setImg(params.getImg());
+        admin.setName(params.getName());
+        admin.setPhone(params.getPhone());
+        admin.setUsername(params.getUsername());
+        return admin;
+    }
+
+    /**
+     * 转化 admin vo 对象
+     *
+     * @param admin
+     * @return
+     */
+    private AdminVo adminToAdminVo(Admin admin) {
+        AdminVo vo = new AdminVo();
+        vo.setId(admin.getId().toString());
+        vo.setImg(admin.getImg());
+        vo.setName(admin.getName());
+        vo.setPhone(admin.getPhone());
+        vo.setRoleId(admin.getPhone());
+        vo.setUsername(admin.getUsername());
+        return vo;
+    }
+
 
     /**
      * 做登录记录

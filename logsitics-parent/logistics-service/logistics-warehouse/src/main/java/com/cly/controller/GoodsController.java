@@ -79,7 +79,7 @@ public class GoodsController {
      * @param state
      * @return
      */
-    @PutMapping("/updateState/${id}/${state}")
+    @PutMapping("/updateState/{id}/{state}")
     public Result updateState(@PathVariable("id") Long id,
                               @PathVariable("state") Integer state) {
         goodsService.updateState(id, state);
@@ -139,6 +139,16 @@ public class GoodsController {
     public Result outGoods(@PathVariable Long id,
                            @PathVariable Integer number) {
         return Result.success(goodsService.outGoods(id, number));
+    }
+
+    /**
+     * 获取所有商品信息 id name
+     *
+     * @return
+     */
+    @GetMapping("/listGoods")
+    public Result listGoods() {
+        return Result.success(goodsService.listGoods());
     }
 
 }

@@ -1,8 +1,9 @@
 package com.cly.service;
 
 import com.cly.pojo.warehouse.Goods;
+import com.cly.vo.warehouse.GoodsIdNameVo;
+import com.cly.vo.warehouse.GoodsInfoVo;
 import com.cly.vo.warehouse.GoodsQueryVo;
-import com.cly.vo.warehouse.GoodsSelectVo;
 import com.cly.vo.warehouse.GoodsVo;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    GoodsSelectVo getById(Long id);
+    GoodsInfoVo getById(Long id);
 
     /**
      * 新进货物 修改信息
@@ -87,4 +88,12 @@ public interface GoodsService {
      * 更新商品上架状态
      */
     void updateState(Long id, Integer state);
+
+    /**
+     * 获取所有商品的 id name
+     *
+     * @return
+     */
+    List<GoodsIdNameVo> listGoods();
+
 }

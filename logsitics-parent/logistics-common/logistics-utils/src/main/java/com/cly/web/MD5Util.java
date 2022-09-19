@@ -3,6 +3,9 @@ package com.cly.web;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * MD5 加密工具类 用于密码加密操作
+ */
 public class MD5Util {
 
     public static String getMD5(String password) {

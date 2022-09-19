@@ -45,6 +45,10 @@ public class Result {
         return new Result(data, code, msg);
     }
 
+    public static Result success(String msg) {
+        return new Result(null, 200, msg);
+    }
+
     public static Result success(Integer code, String msg) {
         return new Result(null, code, msg);
     }

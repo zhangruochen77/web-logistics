@@ -2,6 +2,7 @@ package com.cly.controller;
 
 import com.cly.pojo.admin.Admin;
 import com.cly.service.AdminService;
+import com.cly.vo.admin.AdminInfoParams;
 import com.cly.web.Result;
 import com.cly.web.param.PasswordParams;
 import com.cly.web.param.PhoneParams;
@@ -27,7 +28,7 @@ public class AdminController {
     @PostMapping("/login/phone")
     public Result loginByPhone(@RequestBody PhoneParams params) {
         String token = adminService.loginByPhone(params);
-        return Result.success(token);
+        return Result.success(token, 200, "登录成功！");
     }
 
     /**
@@ -38,7 +39,7 @@ public class AdminController {
     @PostMapping("/login/password")
     public Result loginByPassword(@RequestBody PasswordParams passwordParams) {
         String token = adminService.loginByPassword(passwordParams);
-        return Result.success(token);
+        return Result.success(token, 200, "登录成功！");
     }
 
     /**
@@ -91,6 +92,39 @@ public class AdminController {
         String token = request.getHeader("token");
         boolean res = adminService.deleteAdmin(adminId, token);
         return res ? Result.success("删除成功!") : Result.fail("删除失败!");
+    }
+
+    /**
+     * 获取个人信息
+     *
+     * @return
+     */
+    @GetMapping("/getPersonInfo")
+    public Result getAdmin() {
+        return Result.success(adminService.getAdmin());
+    }
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
+    @PostMapping("/logOut")
+    public Result logOut() {
+        adminService.logOut();
+        return Result.success();
+    }
+
+    /**
+     * 用户更新个人信息
+     *
+     * @param params
+     * @return
+     */
+    @PutMapping("/updateInfo")
+    public Result updateInfo(@RequestBody AdminInfoParams params) {
+        boolean res = adminService.updateInfo(params);
+        return res ? Result.success(200, "更新成功！") : Result.fail("更新失败");
     }
 
 }
