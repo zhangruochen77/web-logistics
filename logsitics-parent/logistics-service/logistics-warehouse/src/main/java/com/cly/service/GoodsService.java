@@ -1,10 +1,7 @@
 package com.cly.service;
 
 import com.cly.pojo.warehouse.Goods;
-import com.cly.vo.warehouse.GoodsIdNameVo;
-import com.cly.vo.warehouse.GoodsInfoVo;
-import com.cly.vo.warehouse.GoodsQueryVo;
-import com.cly.vo.warehouse.GoodsVo;
+import com.cly.vo.warehouse.*;
 
 import java.util.List;
 import java.util.Map;
@@ -96,4 +93,12 @@ public interface GoodsService {
      */
     List<GoodsIdNameVo> listGoods();
 
+    /**
+     * 用户分页查找商品数据
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    Map<String, Object> pageFindGoods(Integer page, Integer limit, GoodsUserParams params);
 }

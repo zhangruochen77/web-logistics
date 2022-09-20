@@ -85,8 +85,9 @@ public class CarController {
      * @return
      */
     @PutMapping("/repair/{id}")
-    public Result repair(@PathVariable("id") Long id) {
-        carService.repair(id);
+    public Result repair(@PathVariable("id") Long id,
+                         @RequestBody String description) {
+        carService.repair(id, description);
         return Result.success("车辆已经进入维修状态");
     }
 

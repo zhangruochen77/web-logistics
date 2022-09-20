@@ -124,6 +124,7 @@ public class GoodsServiceImpl extends
                 .getCityById(goods.getCity()).getData();
         Map<String, String> countyMap = (Map<String, String>) warehouseCmnFeign
                 .getCountyById(goods.getCounty()).getData();
+
         String province = provinceMap.get("value");
         String city = cityMap.get("value");
         String county = countyMap.get("value");
@@ -286,6 +287,87 @@ public class GoodsServiceImpl extends
         return list;
     }
 
+    /**
+     * 用户分页查找商品数据
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public Map<String, Object> pageFindGoods(Integer page, Integer limit, GoodsUserParams params) {
+        LambdaQueryWrapper<Goods> wrapper = createUserPageFindWrapper(params);
+        IPage<Goods> iPage = new Page(page, limit);
+        baseMapper.selectPage(iPage, wrapper);
+
+        List<Goods> goods = iPage.getRecords();
+        List<GoodsUserPageVo> data = new ArrayList<>(goods.size());
+        List<Long> goodIds = new ArrayList<>(goods.size());
+        Map<String, Object> result = new HashMap<>(goods.size() << 1);
+        result.put("total", iPage.getTotal());
+        result.put("data", data);
+
+        goods.forEach(item -> {
+            goodIds.add(item.getId());
+        });
+
+        // TODO: 2022/9/20 远程调用 获取商品的销售量
+        Integer sold = 5;
+
+        goods.forEach(item -> {
+            data.add(GoodsToGoodsUserPageVo(item, sold));
+        });
+
+        return result;
+    }
+
+    /**
+     * 将商品数据转换为 用户分页状态下所展示的数据
+     *
+     * @param item
+     * @param sold
+     * @return
+     */
+    private GoodsUserPageVo GoodsToGoodsUserPageVo(Goods item, Integer sold) {
+        GoodsUserPageVo vo = new GoodsUserPageVo();
+
+        vo.setSold(sold);
+        vo.setName(item.getName());
+        vo.setImg(item.getImg());
+        vo.setPrice(item.getPrice());
+        vo.setId(item.getId().toString());
+        vo.setDescription(item.getDescription());
+
+        return vo;
+    }
+
+    /**
+     * 用户分页查找商品的条件
+     *
+     * @param params
+     * @return
+     */
+    private LambdaQueryWrapper<Goods> createUserPageFindWrapper(GoodsUserParams params) {
+        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
+
+        if (!ObjectUtils.isEmpty(params)) {
+            if (!ObjectUtils.isEmpty(params.getName())) {
+                wrapper.eq(Goods::getName, params.getName());
+            }
+
+            if (!ObjectUtils.isEmpty(params.getPriceStart())) {
+                wrapper.gt(Goods::getPrice, params.getPriceStart());
+            }
+
+            if (!ObjectUtils.isEmpty(params.getPriceEnd())) {
+                wrapper.lt(Goods::getPrice, params.getPriceEnd());
+            }
+
+        }
+
+        return wrapper;
+    }
+
 
     /**
      * 转换 goods 对象为 vo 集合
@@ -295,7 +377,10 @@ public class GoodsServiceImpl extends
      */
     private List<GoodsSelectVo> goodsToSelectVo(List<Goods> records) {
         List<GoodsSelectVo> list = new ArrayList<>(records.size());
-        records.parallelStream().forEach(g -> list.add(goodsToVo(g)));
+        records.parallelStream().forEach(g ->
+                list.add(goodsToVo(g))
+        );
+
         return list;
     }
 

@@ -4,6 +4,7 @@ import com.cly.pojo.car.Car;
 import com.cly.vo.car.CarPageParams;
 import com.cly.vo.car.CarVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface CarService {
@@ -52,6 +53,23 @@ public interface CarService {
      * 车辆维修操作
      *
      * @param id
+     * @param description
      */
-    void repair(Long id);
+    void repair(Long id, String description);
+
+    /**
+     * 获取车辆信息
+     *
+     * @param id
+     * @return
+     */
+    Car getCar(Long id);
+
+    /**
+     * 批量获取车辆信息
+     *
+     * @param carIds
+     * @return
+     */
+    Map<Long, Car> listCarByIds(List<Long> carIds);
 }
