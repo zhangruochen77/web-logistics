@@ -322,6 +322,54 @@ public class GoodsServiceImpl extends
     }
 
     /**
+     * 用户获取商品的详细信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public GoodsUserDetailsVo getGoodsDetailsById(Long id) {
+        Goods goods = baseMapper.selectById(id);
+
+        // TODO: 2022/9/21 远程调用查看订单信息 查看商品销售量
+        Map<String, Object> orderInfo = new HashMap<>();
+
+        // TODO: 2022/9/21 远程调用查看商品地址信息
+        String address = "四川省成都市龙泉驿区";
+
+        return goodsToGoodsUserDetailsVo(goods, address, orderInfo);
+
+    }
+
+    /**
+     * 转化商品 订单 销售量等等信息为商品的详细信息
+     *
+     * @param goods     商品信息
+     * @param address   商品所在地址信息
+     * @param orderInfo 购买了该商品的一些订单信息以及销售量
+     * @return
+     */
+    private GoodsUserDetailsVo goodsToGoodsUserDetailsVo(Goods goods, String address, Map<String, Object> orderInfo) {
+        GoodsUserDetailsVo vo = new GoodsUserDetailsVo();
+        List<OrderUserAboutInfo> data = (List<OrderUserAboutInfo>) orderInfo.get("data");
+        Integer sold = (Integer) orderInfo.get("sold");
+
+        vo.setId(goods.getId().toString());
+        vo.setName(goods.getName());
+//        vo.setSold(sold);
+        vo.setSold(666);
+        vo.setDescription(goods.getDescription());
+        vo.setImg(goods.getImg());
+        vo.setPrice(goods.getPrice().toString());
+        vo.setAddress(address);
+        vo.setNumber(goods.getNumber());
+//        vo.setOrderInfos(data);
+        vo.setOrderInfos(null);
+
+        return vo;
+    }
+
+    /**
      * 将商品数据转换为 用户分页状态下所展示的数据
      *
      * @param item

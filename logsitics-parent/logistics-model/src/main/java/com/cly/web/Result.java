@@ -41,6 +41,10 @@ public class Result {
         return new Result(data, 200, "成功！");
     }
 
+    public static Result success(Object data, Integer code) {
+        return new Result(data, code, "成功！");
+    }
+
     public static Result success(Object data, Integer code, String msg) {
         return new Result(data, code, msg);
     }

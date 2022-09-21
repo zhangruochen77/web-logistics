@@ -91,4 +91,8 @@ public class TokenUtils {
                 .getExpiresAt();
     }
 
+    public static void main(String[] args) {
+        System.out.println(TokenUtils.getId("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTU3MjUxMDgyMzg0NTI4MTc5MywiZXhwIjoxNjYzNzUyNTcwLCJ1c2VybmFtZSI6ImphY2sifQ.bgZ-K3d_6bjrBsvO_mM0tLLpiEQzV_5IYTfnNOI_Sw4"));
+    }
+
 }

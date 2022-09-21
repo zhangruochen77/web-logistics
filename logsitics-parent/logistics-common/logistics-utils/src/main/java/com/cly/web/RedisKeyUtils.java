@@ -14,4 +14,24 @@ public class RedisKeyUtils {
     public static final String createAdminKey(Long id) {
         return "admin:" + id;
     }
+
+    /**
+     * 生成 phone key 的方法
+     *
+     * @param phone
+     * @return
+     */
+    public static String createPhoneKey(String phone) {
+        return "phone:" + phone;
+    }
+
+    /**
+     * 生成 user key 的方法
+     *
+     * @param id
+     * @return
+     */
+    public static String createUserKey(Long id) {
+        return "user:" + id;
+    }
 }

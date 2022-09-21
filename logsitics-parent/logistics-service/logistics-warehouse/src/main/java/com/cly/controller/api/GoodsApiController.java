@@ -29,4 +29,16 @@ public class GoodsApiController {
                                 @RequestBody GoodsUserParams params) {
         return Result.success(goodsService.pageFindGoods(page, limit, params));
     }
+
+    /**
+     * 用户查看商品的详细数据
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/getGoodsDetailsById/{id}")
+    public Result getGoodsDetailsById(@PathVariable("id") Long id) {
+        return Result.success(goodsService.getGoodsDetailsById(id));
+    }
+
 }

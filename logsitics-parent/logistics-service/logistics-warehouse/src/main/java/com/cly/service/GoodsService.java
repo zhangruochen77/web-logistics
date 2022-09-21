@@ -101,4 +101,13 @@ public interface GoodsService {
      * @return
      */
     Map<String, Object> pageFindGoods(Integer page, Integer limit, GoodsUserParams params);
+
+    /**
+     * 用户查看商品详细信息情况
+     *
+     * @param id
+     * @return
+     */
+    GoodsUserDetailsVo getGoodsDetailsById(Long id);
+
 }

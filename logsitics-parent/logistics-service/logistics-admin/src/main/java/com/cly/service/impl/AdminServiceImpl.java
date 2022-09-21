@@ -348,7 +348,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
      * @param isPhone 是否使用手机登录 false -> 密码登录
      */
     private void doLoginLog(Admin admin, boolean isPhone) {
-        loginInfoService.doLoginLog(admin, isPhone);
+        loginInfoService.doLoginLog(admin.getId(), isPhone);
     }
 
 }

@@ -3,6 +3,7 @@ package com.cly.service.impl;
 import com.cloopen.rest.sdk.BodyType;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.cly.service.CodeService;
+import com.cly.web.RedisKeyUtils;
 import com.cly.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,8 +62,9 @@ public class CodeServiceImpl implements CodeService {
      */
     @Override
     public Result createCode(String phone) {
+        String redisKey = RedisKeyUtils.createPhoneKey(phone);
 
-        Object codeObj = redisTemplate.opsForValue().get(phone);
+        Object codeObj = redisTemplate.opsForValue().get(redisKey);
 
         if (!ObjectUtils.isEmpty(codeObj)) {
             // TODO: 2022/9/14 操作过于频繁 如何解决
@@ -74,7 +76,7 @@ public class CodeServiceImpl implements CodeService {
         }
 
         String code = createRandomCode();
-        redisTemplate.opsForValue().set(phone, code, 3L, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(redisKey, code, 3L, TimeUnit.HOURS);
 
         CCPRestSmsSDK sdk = new CCPRestSmsSDK();
         sdk.init(serverIp, serverPort);
