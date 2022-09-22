@@ -53,6 +53,11 @@ public class Goods extends Base {
     /**
      * 货物状态
      */
-    private int state;
+    private Integer state;
+
+    /**
+     * 销售量
+     */
+    private Integer sold;
 
 }

@@ -1,6 +1,9 @@
 package com.cly.feign;
 
+import com.cly.pojo.admin.User;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,5 +20,15 @@ public interface WarehouseAdminFeign {
      */
     @PostMapping("/log/admin/admin/listAdminByArray")
     Map<Long, String> listAdminByArray(@RequestBody Long[] adminIds);
+
+
+    /**
+     * 远程调用 获取用户信息
+     *
+     * @return
+     */
+    @GetMapping("/front/admin/user/getUserById/{id}")
+    User getUserById(@PathVariable("id") Long id);
+
 
 }

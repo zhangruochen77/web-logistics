@@ -2,9 +2,11 @@ package com.cly.service;
 
 import com.cly.pojo.warehouse.Goods;
 import com.cly.vo.warehouse.*;
+import com.cly.web.Result;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface GoodsService {
 
@@ -110,4 +112,20 @@ public interface GoodsService {
      */
     GoodsUserDetailsVo getGoodsDetailsById(Long id);
 
+    /**
+     * 用户下单
+     *
+     * @param id
+     * @param number
+     * @return
+     */
+    Result userDoOrder(Long id, Integer number);
+
+    /**
+     * 多 id 获取商品信息
+     *
+     * @param ids
+     * @return
+     */
+    Map<Long, Goods> listGoodsByIds(Set<Long> ids);
 }

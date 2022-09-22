@@ -1,5 +1,6 @@
 package com.cly.service;
 
+import com.cly.pojo.admin.User;
 import com.cly.vo.admin.RegistryParams;
 import com.cly.vo.admin.UserVo;
 import com.cly.web.param.PasswordParams;
@@ -42,4 +43,12 @@ public interface UserService {
      * @return
      */
     UserVo getUserInfo();
+
+    /**
+     * 获取用户信息
+     *
+     * @param id
+     * @return
+     */
+    User getUserById(Long id);
 }

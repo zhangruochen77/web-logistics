@@ -41,4 +41,17 @@ public class GoodsApiController {
         return Result.success(goodsService.getGoodsDetailsById(id));
     }
 
+    /**
+     * 用户下单
+     *
+     * @param id
+     * @param number
+     * @return
+     */
+    @PostMapping("/userDoOrder/{id}/{number}")
+    public Result userDoOrder(@PathVariable("id") Long id,
+                              @PathVariable("number") Integer number) {
+        return Result.success(goodsService.userDoOrder(id, number));
+    }
+
 }

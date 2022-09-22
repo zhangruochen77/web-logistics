@@ -1,11 +1,15 @@
 package com.cly.controller;
 
+import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
 import com.cly.vo.warehouse.GoodsQueryVo;
 import com.cly.vo.warehouse.GoodsVo;
 import com.cly.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 商品接口
@@ -149,6 +153,18 @@ public class GoodsController {
     @GetMapping("/listGoods")
     public Result listGoods() {
         return Result.success(goodsService.listGoods());
+    }
+
+
+    /**
+     * 批量获取商品通过 id
+     *
+     * @param ids
+     * @return
+     */
+    @PostMapping("/listGoodsByIds")
+    public Map<Long, Goods> listGoodsByIds(@RequestBody Set<Long> ids) {
+        return goodsService.listGoodsByIds(ids);
     }
 
 }

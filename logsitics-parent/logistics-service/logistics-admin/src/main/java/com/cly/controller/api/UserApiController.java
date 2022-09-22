@@ -1,5 +1,6 @@
 package com.cly.controller.api;
 
+import com.cly.pojo.admin.User;
 import com.cly.service.UserService;
 import com.cly.vo.admin.RegistryParams;
 import com.cly.web.Result;
@@ -72,6 +73,16 @@ public class UserApiController {
     @GetMapping("/getUserInfo")
     public Result getUserInfo() {
         return Result.success(userService.getUserInfo());
+    }
+
+    /**
+     * 远程调用 获取用户信息
+     *
+     * @return
+     */
+    @GetMapping("/getUserById/{id}")
+    public User getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 
 }

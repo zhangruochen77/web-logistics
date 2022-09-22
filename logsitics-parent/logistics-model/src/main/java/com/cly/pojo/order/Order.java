@@ -1,6 +1,5 @@
 package com.cly.pojo.order;
 
-import com.cly.pojo.base.Base;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,9 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order extends Base {
+public class Order {
+
+    private Long id;
 
     /**
      * 创建时间
@@ -49,6 +50,20 @@ public class Order extends Base {
 
     /**
      * 是否到货状态 送货员送货后 确认状态 在由管理员确认历史订单
+     * 0 用户下单 送货员未接单
+     * 1 送货员接单 正在派送
+     * 2 送货员送达 用户未确认订单
+     * 3 用户确认订单 订单完成 -> 进入历史订单
      */
     private Integer state;
+
+    /**
+     * 用户 id
+     */
+    private Long userId;
+
+    /**
+     * 商品送达时间
+     */
+    private Date receiveTime;
 }

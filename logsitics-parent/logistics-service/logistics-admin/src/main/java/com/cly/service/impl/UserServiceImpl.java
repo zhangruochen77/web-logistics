@@ -79,9 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         User user = baseMapper.selectOne(new LambdaQueryWrapper<User>()
-                .eq(User::getPhone, params.getPhone())
-                .select(User::getId)
-                .select(User::getUsername));
+                .eq(User::getPhone, params.getPhone()));
 
         // 生成 token
         String token = TokenUtils.createToken(user.getId(), user.getUsername());
@@ -144,6 +142,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectById(id);
 
         return userToUserVo(user);
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public User getUserById(Long id) {
+        return baseMapper.selectById(id);
     }
 
     /**

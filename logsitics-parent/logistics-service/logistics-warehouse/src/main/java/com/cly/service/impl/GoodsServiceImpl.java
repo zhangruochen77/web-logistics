@@ -5,11 +5,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cly.dao.GoodsMapper;
+import com.cly.feign.WareHouseOrderFeign;
+import com.cly.feign.WarehouseAdminFeign;
 import com.cly.feign.WarehouseCmnFeign;
+import com.cly.pojo.admin.User;
 import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
 import com.cly.service.InOrderService;
 import com.cly.vo.warehouse.*;
+import com.cly.web.Result;
+import com.cly.web.ThreadLocalAdminUtils;
+import com.cly.web.TokenUtils;
+import com.cly.web.param.CreateOrderParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +35,12 @@ public class GoodsServiceImpl extends
 
     @Autowired
     private WarehouseCmnFeign warehouseCmnFeign;
+
+    @Autowired
+    private WarehouseAdminFeign warehouseAdminFeign;
+
+    @Autowired
+    private WareHouseOrderFeign wareHouseOrderFeign;
 
     /**
      * 分页查询商品
@@ -331,14 +344,95 @@ public class GoodsServiceImpl extends
     public GoodsUserDetailsVo getGoodsDetailsById(Long id) {
         Goods goods = baseMapper.selectById(id);
 
-        // TODO: 2022/9/21 远程调用查看订单信息 查看商品销售量
+        // TODO: 2022/9/21 远程调用查看订单信息
         Map<String, Object> orderInfo = new HashMap<>();
 
-        // TODO: 2022/9/21 远程调用查看商品地址信息
-        String address = "四川省成都市龙泉驿区";
+        // 远程调用查看商品地址信息
+        String address = warehouseCmnFeign.getArea(goods.getProvince(),
+                goods.getCity(), goods.getCounty());
 
         return goodsToGoodsUserDetailsVo(goods, address, orderInfo);
 
+    }
+
+    /**
+     * 用户下单
+     * 首先获取商品的信息
+     * 判断商品信息是否满足用户购买的要求 多线程环境下 数据会发生变化
+     * 不满足 提醒用户  ——> return
+     * 满足 需要保证事务 因为在查询最新数据的过程中 其他用户可能也对该商品做了修改
+     * 所以需要在更新商品数量时 使用 cas 算法 这里只运用了一次 cas 算法
+     * 没有操作成功 则直接返回给用户 让用户重新下载 如果使用 设定了循环则可能导致 cpu 空转 ——> 但是可能够保证商品能买出 过程中也需要再继续判断是否满足用户购买的要求
+     * 当以上的事务操作成功之后 则可以为用户生成订单信息了
+     * 那么远程获取用户的信息 商品的信息构造订单产生
+     * 最后远程调用订单系统 实际的生成订单信息
+     * 最后返回订单编号
+     *
+     * @param id     商品 id
+     * @param number 购买数量
+     * @return 订单编号
+     */
+    @Override
+    public Result userDoOrder(Long id, Integer number) {
+        Goods goods = baseMapper.selectById(id);
+        int oldNumber = goods.getNumber();
+        int oldSold = goods.getSold();
+
+        if (oldNumber < number) {
+            Result.fail(500, "数量不足");
+        }
+
+        // 剩余商品数量
+        goods.setNumber(oldNumber - number);
+        goods.setSold(oldSold + number);
+        int row = baseMapper.update(goods, new LambdaQueryWrapper<Goods>()
+                .eq(Goods::getNumber, oldNumber)
+                .eq(Goods::getId, id)
+                .eq(Goods::getSold, oldSold));
+
+        // 判断事务是否完成 这里不让循环 仅仅只 cas 判断一次 防止 cpu 空转
+        if (0 == row) {
+            return Result.fail("网络卡顿了,请重试！");
+        }
+
+        // 远程调用获取用户信息
+        String token = ThreadLocalAdminUtils.get();
+        Long userId = TokenUtils.getId(token);
+        User user = warehouseAdminFeign.getUserById(userId);
+
+        // 远程调用获取商品发送地址
+        String deliver = warehouseCmnFeign.getArea(goods.getProvince(),
+                goods.getCity(), goods.getCounty());
+
+        // 构造生成订单的参数
+        CreateOrderParams params = new CreateOrderParams();
+        params.setReceiveArea(user.getAddress());
+        params.setUserId(userId);
+        params.setDeliverArea(deliver);
+        params.setGoodsId(id);
+        params.setNumber(number);
+
+        // 生成出货订单
+        Long orderId = wareHouseOrderFeign.createOrder(params);
+
+        return Result.success(orderId.toString(), 200, "下单成功!等待发货");
+    }
+
+    /**
+     * 多 id 获取商品信息
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public Map<Long, Goods> listGoodsByIds(Set<Long> ids) {
+        List<Goods> goods = baseMapper.selectBatchIds(ids);
+        Map<Long, Goods> map = new HashMap<>(goods.size() << 1);
+        goods.forEach(item -> {
+            map.put(item.getId(), item);
+        });
+
+        return map;
     }
 
     /**
@@ -352,11 +446,10 @@ public class GoodsServiceImpl extends
     private GoodsUserDetailsVo goodsToGoodsUserDetailsVo(Goods goods, String address, Map<String, Object> orderInfo) {
         GoodsUserDetailsVo vo = new GoodsUserDetailsVo();
         List<OrderUserAboutInfo> data = (List<OrderUserAboutInfo>) orderInfo.get("data");
-        Integer sold = (Integer) orderInfo.get("sold");
 
         vo.setId(goods.getId().toString());
         vo.setName(goods.getName());
-//        vo.setSold(sold);
+        vo.setSold(goods.getSold());
         vo.setSold(666);
         vo.setDescription(goods.getDescription());
         vo.setImg(goods.getImg());

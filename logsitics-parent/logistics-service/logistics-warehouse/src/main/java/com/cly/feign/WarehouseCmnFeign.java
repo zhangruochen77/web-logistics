@@ -35,4 +35,15 @@ public interface WarehouseCmnFeign {
     @GetMapping("/log/cmn/county/getCountyById/{id}")
     Result getCountyById(@PathVariable("id") Long id);
 
+    /**
+     * 直接获取到省市区地址
+     *
+     * @return
+     */
+    @GetMapping("/log/cmn/area/getArea/{province}/{city}/{county}")
+    String getArea(@PathVariable("province") Long province,
+                   @PathVariable("city") Long city,
+                   @PathVariable("county") Long county);
+
+
 }

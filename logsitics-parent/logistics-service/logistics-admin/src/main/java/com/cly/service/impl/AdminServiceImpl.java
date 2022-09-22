@@ -335,7 +335,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         vo.setImg(admin.getImg());
         vo.setName(admin.getName());
         vo.setPhone(admin.getPhone());
-        vo.setRoleId(admin.getPhone());
+        vo.setRoleId(admin.getRoleId().toString());
         vo.setUsername(admin.getUsername());
         return vo;
     }
