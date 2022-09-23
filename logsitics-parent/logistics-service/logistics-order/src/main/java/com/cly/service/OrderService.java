@@ -32,4 +32,42 @@ public interface OrderService {
      */
     Map<String, Object> pageDisNewOrder(Integer page, Integer limit);
 
+    /**
+     * 派送员接单
+     *
+     * @param id
+     * @return
+     */
+    boolean orderReceive(Long id);
+
+    /**
+     * 一次性接多个单
+     *
+     * @param orderIds
+     * @return
+     */
+    int listOrderReceive(Long[] orderIds);
+
+    /**
+     * 分页查看当前派送员正在执行的订单信息
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    Map<String, Object> pageDisDispatcherOrder(Integer page, Integer limit);
+
+    /**
+     * 确认订单送达
+     *
+     * @param id
+     */
+    void updateOrderSure(Long id);
+
+    /**
+     * 一次性确认多个订单送达
+     *
+     * @param orderIds
+     */
+    void listOrderSure(Long[] orderIds);
 }

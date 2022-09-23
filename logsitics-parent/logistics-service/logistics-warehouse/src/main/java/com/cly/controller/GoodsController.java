@@ -2,6 +2,7 @@ package com.cly.controller;
 
 import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
+import com.cly.vo.warehouse.GoodsDispatcherPageVo;
 import com.cly.vo.warehouse.GoodsQueryVo;
 import com.cly.vo.warehouse.GoodsVo;
 import com.cly.web.Result;
@@ -165,6 +166,17 @@ public class GoodsController {
     @PostMapping("/listGoodsByIds")
     public Map<Long, Goods> listGoodsByIds(@RequestBody Set<Long> ids) {
         return goodsService.listGoodsByIds(ids);
+    }
+
+    /**
+     * 批量获取商品通过 id 用于派送员展示
+     *
+     * @param ids
+     * @return
+     */
+    @PostMapping("/listGoodsDispatcherPageVoByIds")
+    public Map<Long, GoodsDispatcherPageVo> listGoodsDispatcherPageVoByIds(@RequestBody Set<Long> ids) {
+        return goodsService.listGoodsDispatcherPageVoByIds(ids);
     }
 
 }

@@ -65,5 +65,5 @@ public class Order {
     /**
      * 商品送达时间
      */
-    private Date receiveTime;
+    private Date arriveTime;
 }

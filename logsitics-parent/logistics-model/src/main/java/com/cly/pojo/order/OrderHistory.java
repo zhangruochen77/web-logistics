@@ -52,4 +52,14 @@ public class OrderHistory extends Base {
      */
     private Integer number;
 
+    /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
+     * 订单送达时间
+     */
+    private Date arriveTime;
+
 }

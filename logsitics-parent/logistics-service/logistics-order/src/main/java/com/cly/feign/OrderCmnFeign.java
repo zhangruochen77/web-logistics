@@ -17,4 +17,5 @@ public interface OrderCmnFeign {
     String getArea(@PathVariable("province") Long province,
                           @PathVariable("city") Long city,
                           @PathVariable("county") Long county);
+
 }

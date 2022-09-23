@@ -128,4 +128,14 @@ public interface GoodsService {
      * @return
      */
     Map<Long, Goods> listGoodsByIds(Set<Long> ids);
+
+
+    /**
+     * 多 id 获取商品信息 用于派送员查看订单
+     *
+     * @param ids
+     * @return
+     */
+    Map<Long, GoodsDispatcherPageVo> listGoodsDispatcherPageVoByIds(Set<Long> ids);
+
 }

@@ -436,6 +436,40 @@ public class GoodsServiceImpl extends
     }
 
     /**
+     * 多 id 获取商品信息 用于派送员查看订单
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public Map<Long, GoodsDispatcherPageVo> listGoodsDispatcherPageVoByIds(Set<Long> ids) {
+        List<Goods> goods = baseMapper.selectBatchIds(ids);
+        Map<Long, GoodsDispatcherPageVo> map = new HashMap<>(goods.size() << 1);
+
+        goods.forEach(item -> {
+            map.put(item.getId(), toGoodsDispatcherPageVo(item));
+        });
+
+        return map;
+    }
+
+    /**
+     * 转化为派送员查看订单的操作
+     *
+     * @param item
+     * @return
+     */
+    private GoodsDispatcherPageVo toGoodsDispatcherPageVo(Goods item) {
+        GoodsDispatcherPageVo vo = new GoodsDispatcherPageVo();
+        vo.setId(item.getId());
+        vo.setDeliverArea(warehouseCmnFeign.getArea(item.getProvince(), item.getCity(), item.getCounty()));
+        vo.setImg(item.getImg());
+        vo.setName(item.getName());
+
+        return vo;
+    }
+
+    /**
      * 转化商品 订单 销售量等等信息为商品的详细信息
      *
      * @param goods     商品信息
