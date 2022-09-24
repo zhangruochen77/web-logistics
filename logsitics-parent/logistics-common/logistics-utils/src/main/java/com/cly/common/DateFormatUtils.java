@@ -15,7 +15,7 @@ public class DateFormatUtils {
     /**
      * 使用本地线程绑定的
      */
-    private static final ThreadLocal<SimpleDateFormat> LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+    private static final ThreadLocal<SimpleDateFormat> LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 
     /**
      * 日期转换为字符串格式

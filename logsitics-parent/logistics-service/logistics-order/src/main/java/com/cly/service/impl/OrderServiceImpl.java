@@ -10,6 +10,7 @@ import com.cly.exception.LogException;
 import com.cly.feign.OrderWarehouseFeign;
 import com.cly.pojo.order.Order;
 import com.cly.pojo.warehouse.Goods;
+import com.cly.service.OrderHistoryService;
 import com.cly.service.OrderService;
 import com.cly.vo.order.OrderDispatcherPageVo;
 import com.cly.vo.order.OrderUserPageVo;
@@ -19,6 +20,7 @@ import com.cly.web.TokenUtils;
 import com.cly.web.param.CreateOrderParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
@@ -28,6 +30,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     private OrderWarehouseFeign orderWarehouseFeign;
+
+    @Autowired
+    private OrderHistoryService orderHistoryService;
 
 
     /**
@@ -162,7 +167,35 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     }
 
+    /**
+     * 用户确认订单送达
+     *
+     * @param orderId
+     * @return
+     */
+    @Transactional
+    @Override
+    public void userSureOrder(Long orderId) {
+        Order order = baseMapper.selectById(orderId);
+        Long userId = TokenUtils.getId(ThreadLocalAdminUtils.get());
 
+        if (!userId.equals(order.getUserId())) {
+            throw new LogException("用户操作不正确");
+        }
+
+        orderHistoryService.insert(order);
+        baseMapper.deleteById(orderId);
+
+    }
+
+
+    /**
+     * 转换为派送员在配送订单时的分页订单信息
+     *
+     * @param item
+     * @param goods
+     * @return
+     */
     private OrderDispatcherPageVo orderToOrderDispatcherPageVoInSure(Order item, GoodsDispatcherPageVo goods) {
         OrderDispatcherPageVo vo = new OrderDispatcherPageVo();
         vo.setImg(goods.getImg());

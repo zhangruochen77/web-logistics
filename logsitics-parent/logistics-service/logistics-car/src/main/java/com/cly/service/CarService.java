@@ -72,4 +72,19 @@ public interface CarService {
      * @return
      */
     Map<Long, Car> listCarByIds(List<Long> carIds);
+
+    /**
+     * 解除司机和车辆的关系
+     *
+     * @param id
+     */
+    void dissolveRelationship(Long id);
+
+    /**
+     * 添加司机和车辆的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     */
+    void relateCarAndDispatcher(Long carId, Long dispatcherId);
 }

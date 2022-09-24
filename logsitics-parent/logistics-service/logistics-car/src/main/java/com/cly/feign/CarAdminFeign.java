@@ -34,7 +34,18 @@ public interface CarAdminFeign {
      * @param ids
      * @return
      */
-    @PostMapping("/getDispatcherNamesByIds")
+    @PostMapping("/log/admin/dispatcher/getDispatcherNamesByIds")
     Map<Long, String> getDispatcherNamesByIds(@RequestBody List<Long> ids);
 
+
+    /**
+     * 添加车辆和司机的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     * @return
+     */
+    @PutMapping("/log/admin/dispatcher/relateCarAndDispatcher/{carId}/{dispatcherId}")
+    Boolean relateCarAndDispatcher(@PathVariable("carId") Long carId,
+                                   @PathVariable("dispatcherId") Long dispatcherId);
 }

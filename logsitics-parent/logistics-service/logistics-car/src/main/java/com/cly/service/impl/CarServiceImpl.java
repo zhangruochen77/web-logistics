@@ -63,7 +63,6 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
         Car car = baseMapper.selectById(id);
 
         // TODO: 2022/9/20 移除维修信息
-        // TODO: 2022/9/19 移除相关的订单信息
 
         // 远程调用 移除其车辆和司机的信息
         if (!ObjectUtils.isEmpty(car.getDispatcherId())) {
@@ -129,13 +128,15 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
                 && !ObjectUtils.isEmpty(params.getIsDispatch())) {
 
             List<Long> disPatcherIds = new ArrayList<>(records.size());
-            records.forEach(car -> disPatcherIds.add(car.getId()));
+            records.forEach(car -> disPatcherIds.add(car.getDispatcherId()));
 
             // 远程调用 获取司机姓名
             Map<Long, String> dispatcher = carAdminFeign.getDispatcherNamesByIds(disPatcherIds);
             records.forEach(car -> {
                 data.add(carToCarVo(car, dispatcher.get(car.getDispatcherId())));
             });
+
+            return result;
         }
 
         records.forEach(car -> {
@@ -202,6 +203,46 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
         return result;
     }
 
+    /**
+     * 解除司机和车辆的关系
+     *
+     * @param id
+     */
+    @Override
+    public void dissolveRelationship(Long id) {
+        Car car = baseMapper.selectById(id);
+        Boolean res = carAdminFeign.removeCarInfo(car.getDispatcherId());
+        if (!res) {
+            throw new LogException("服务器错误");
+        }
+
+        int row = baseMapper.update(null, new LambdaUpdateWrapper<Car>().eq(Car::getId, id).set(Car::getDispatcherId, null));
+        if (row == 0) {
+            throw new LogException("服务器错误");
+        }
+
+    }
+
+    /**
+     * 添加司机和车辆的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     */
+    @Override
+    public void relateCarAndDispatcher(Long carId, Long dispatcherId) {
+        try {
+            Boolean res = carAdminFeign.relateCarAndDispatcher(carId, dispatcherId);
+            if (!res) {
+                throw new LogException("司机已经拥有车辆");
+            }
+        } catch (LogException e) {
+            throw new LogException(e.getMessage());
+        }
+
+        baseMapper.update(null, new LambdaUpdateWrapper<Car>().set(Car::getDispatcherId, dispatcherId).eq(Car::getId, carId));
+    }
+
 
     /**
      * 生成条件查询对象
@@ -255,7 +296,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
                 .carId(car.getCarId())
                 .id(car.getId().toString())
                 .dispatcherName(dispatcherName)
-                .dispatcherId(car.getDispatcherId().toString())
+                .dispatcherId(ObjectUtils.isEmpty(car.getDispatcherId()) ? null : car.getDispatcherId().toString())
                 .startUseTime(DateFormatUtils.dateFormat(car.getStartUseTime()))
                 .build();
     }

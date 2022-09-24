@@ -30,4 +30,5 @@ public class CarPageParams {
      * 是否分配
      */
     private Boolean isDispatch;
+
 }

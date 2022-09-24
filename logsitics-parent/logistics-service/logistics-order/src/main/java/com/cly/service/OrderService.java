@@ -70,4 +70,12 @@ public interface OrderService {
      * @param orderIds
      */
     void listOrderSure(Long[] orderIds);
+
+    /**
+     * 用户确认订单送达
+     *
+     * @param orderId
+     * @return
+     */
+    void userSureOrder(Long orderId);
 }

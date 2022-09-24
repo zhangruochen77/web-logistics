@@ -62,4 +62,9 @@ public class OrderHistory extends Base {
      */
     private Date arriveTime;
 
+    /**
+     * 派送员和用户删除该订单信息的情况
+     */
+    private Integer deleteCount;
+
 }

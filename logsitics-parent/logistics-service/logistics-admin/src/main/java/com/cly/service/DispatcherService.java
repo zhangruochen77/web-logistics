@@ -1,5 +1,7 @@
 package com.cly.service;
 
+import com.cly.vo.admin.DispatcherVo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +31,19 @@ public interface DispatcherService {
      */
     Map<Long, String> getDispatcherNamesByIds(List<Long> ids);
 
+    /**
+     * 添加车辆和司机的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     * @return
+     */
+    Boolean relateCarAndDispatcher(Long carId, Long dispatcherId);
+
+    /**
+     * 获取司机及其 id 信息
+     *
+     * @return
+     */
+    List<DispatcherVo> listDispatcher();
 }

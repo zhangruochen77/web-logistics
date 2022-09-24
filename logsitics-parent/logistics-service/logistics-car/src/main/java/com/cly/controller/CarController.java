@@ -91,4 +91,30 @@ public class CarController {
         return Result.success("车辆已经进入维修状态");
     }
 
+
+    /**
+     * 解除司机和车辆的关系
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/dissolveRelationship/{id}")
+    public Result dissolveRelationship(@PathVariable Long id) {
+        carService.dissolveRelationship(id);
+        return Result.success("解除关系成功");
+    }
+
+    /**
+     * 添加司机和车辆的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     * @return
+     */
+    @PutMapping("/relateCarAndDispatcher/{carId}/{dispatcherId}")
+    public Result relateCarAndDispatcher(@PathVariable("carId") Long carId,
+                                         @PathVariable("dispatcherId") Long dispatcherId) {
+        carService.relateCarAndDispatcher(carId, dispatcherId);
+        return Result.success("添加关系成功");
+    }
 }

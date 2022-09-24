@@ -39,4 +39,17 @@ public class OrderApiController {
         return Result.success(orderService.userPageFind(page, limit));
     }
 
+
+    /**
+     * 用户确认订单送达
+     *
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/userSureOrder/{orderId}")
+    public Result userSureOrder(@PathVariable("orderId") Long orderId) {
+        orderService.userSureOrder(orderId);
+        return Result.success("已经成功确认订单送达");
+    }
+
 }

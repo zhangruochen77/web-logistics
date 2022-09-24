@@ -1,6 +1,7 @@
 package com.cly.controller;
 
 import com.cly.service.DispatcherService;
+import com.cly.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,29 @@ public class DispatcherController {
     @PostMapping("/getDispatcherNamesByIds")
     public Map<Long, String> getDispatcherNamesByIds(@RequestBody List<Long> ids) {
         return dispatcherService.getDispatcherNamesByIds(ids);
+    }
+
+    /**
+     * 添加车辆和司机的关系
+     *
+     * @param carId
+     * @param dispatcherId
+     * @return
+     */
+    @PutMapping("/relateCarAndDispatcher/{carId}/{dispatcherId}")
+    public Boolean relateCarAndDispatcher(@PathVariable("carId") Long carId,
+                                          @PathVariable("dispatcherId") Long dispatcherId) {
+        return dispatcherService.relateCarAndDispatcher(carId, dispatcherId);
+    }
+
+    /**
+     * 获取司机及其 id 信息
+     *
+     * @return
+     */
+    @GetMapping("/listDispatcher")
+    public Result listDispatcher() {
+        return Result.success(dispatcherService.listDispatcher());
     }
 
 }
