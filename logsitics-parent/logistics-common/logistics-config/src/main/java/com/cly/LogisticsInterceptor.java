@@ -13,8 +13,8 @@ public class LogisticsInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
-        System.out.println("token = " + token);
         ThreadLocalAdminUtils.set(token);
+        System.out.println("Current Thread is ---------> " + Thread.currentThread().getName());
         return true;
     }
 

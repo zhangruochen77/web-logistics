@@ -1,9 +1,12 @@
 package com.cly.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cly.common.DateFormatUtils;
 import com.cly.dao.OrderHistoryMapper;
+import com.cly.feign.OrderAdminFeign;
 import com.cly.feign.OrderWarehouseFeign;
 import com.cly.pojo.order.Order;
 import com.cly.pojo.order.OrderHistory;
@@ -13,6 +16,7 @@ import com.cly.service.OrderDispatcherService;
 import com.cly.service.OrderHistoryService;
 import com.cly.service.OrderUserService;
 import com.cly.vo.order.OrderDispatcherHistoryPageVo;
+import com.cly.vo.order.OrderHistoryManageVo;
 import com.cly.vo.order.OrderUserHistoryPageVo;
 import com.cly.web.ThreadLocalAdminUtils;
 import com.cly.web.TokenUtils;
@@ -35,6 +39,9 @@ public class OrderHistoryServiceImpl extends ServiceImpl<OrderHistoryMapper, Ord
 
     @Autowired
     private OrderWarehouseFeign orderWarehouseFeign;
+
+    @Autowired
+    private OrderAdminFeign orderAdminFeign;
 
     /**
      * 创建历史订单信息
@@ -163,6 +170,58 @@ public class OrderHistoryServiceImpl extends ServiceImpl<OrderHistoryMapper, Ord
         for (Long orderId : orderIds) {
             addRemoveCount(orderId);
         }
+    }
+
+    /**
+     * 管理员分页查看历史订单信息
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public Map<String, Object> pageFindManage(Integer page, Integer limit) {
+        IPage<OrderHistory> iPage = new Page<>(page, limit);
+        baseMapper.selectPage(iPage, null);
+
+        List<OrderHistory> orders = iPage.getRecords();
+        Set<Long> goodsIds = orders.stream().map(orderHistory -> orderHistory.getGoodsId()).collect(Collectors.toSet());
+        Set<Long> userIds = orders.stream().map(orderHistory -> orderHistory.getUserId()).collect(Collectors.toSet());
+        List<Long> dispatcherIds = orders.stream().map(orderHistory -> orderHistory.getDispatcherId()).distinct().collect(Collectors.toList());
+
+        Map<Long, Goods> goodsMap = orderWarehouseFeign.listGoodsByIds(goodsIds);
+        Map<Long, String> dispatcher = orderAdminFeign.getDispatcherNamesByIds(dispatcherIds);
+        Map<Long, String> users = orderAdminFeign.listUserByIds(userIds);
+
+        List<OrderHistoryManageVo> data = orders.stream().map(history -> {
+            Goods goods = goodsMap.get(history.getGoodsId());
+
+            OrderHistoryManageVo vo = new OrderHistoryManageVo();
+            vo.setId(history.getId().toString());
+            vo.setCreateTime(DateFormatUtils.dateFormat(history.getCreateTime()));
+            vo.setDeliverTime(DateFormatUtils.dateFormat(history.getDeliverTime()));
+            vo.setArriveTime(DateFormatUtils.dateFormat(history.getArriveTime()));
+            vo.setReceiveTime(DateFormatUtils.dateFormat(history.getReceiveTime()));
+            vo.setDispatcherId(history.getDispatcherId().toString());
+            vo.setDispatcherName(dispatcher.get(history.getDispatcherId()));
+            vo.setGoodsId(history.getGoodsId().toString());
+            vo.setGoodsName(goods.getName());
+            vo.setImg(goods.getImg());
+            vo.setUserId(history.getUserId().toString());
+            vo.setUserName(users.get(history.getUserId()));
+            vo.setDeleteCount(history.getDeleteCount());
+            vo.setNumber(history.getNumber());
+            vo.setReceiveArea(history.getReceiveArea());
+            vo.setDeliverArea(history.getDeliverArea());
+
+            return vo;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> result = new HashMap<>(4);
+        result.put("total", iPage.getTotal());
+        result.put("data", data);
+
+        return result;
     }
 
     /**

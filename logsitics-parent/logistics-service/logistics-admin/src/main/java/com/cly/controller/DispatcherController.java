@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/log/admin/dispatcher")
@@ -19,7 +20,7 @@ public class DispatcherController {
     /**
      * 解除司机和车辆的关系
      *
-     * @param id
+     * @param id 主键 id
      * @return
      */
     @PutMapping("/removeCarInfo/{id}")
@@ -40,13 +41,13 @@ public class DispatcherController {
 
 
     /**
-     * 批量获取司机的姓名
+     * 批量获取司机的姓名通过 ids
      *
      * @param ids
      * @return
      */
     @PostMapping("/getDispatcherNamesByIds")
-    public Map<Long, String> getDispatcherNamesByIds(@RequestBody List<Long> ids) {
+    public Map<Long, String> getDispatcherNamesByAdminIds(@RequestBody List<Long> ids) {
         return dispatcherService.getDispatcherNamesByIds(ids);
     }
 
@@ -54,13 +55,13 @@ public class DispatcherController {
      * 添加车辆和司机的关系
      *
      * @param carId
-     * @param dispatcherId
+     * @param id
      * @return
      */
-    @PutMapping("/relateCarAndDispatcher/{carId}/{dispatcherId}")
+    @PutMapping("/relateCarAndDispatcher/{carId}/{id}")
     public Boolean relateCarAndDispatcher(@PathVariable("carId") Long carId,
-                                          @PathVariable("dispatcherId") Long dispatcherId) {
-        return dispatcherService.relateCarAndDispatcher(carId, dispatcherId);
+                                          @PathVariable("id") Long id) {
+        return dispatcherService.relateCarAndDispatcher(carId, id);
     }
 
     /**
@@ -71,6 +72,29 @@ public class DispatcherController {
     @GetMapping("/listDispatcher")
     public Result listDispatcher() {
         return Result.success(dispatcherService.listDispatcher());
+    }
+
+    /**
+     * 获取司机和车辆表关联的id信息
+     *
+     * @param adminId
+     * @return
+     */
+    @GetMapping("/getDispatcherId/{adminId}")
+    public Long getDispatcherId(@PathVariable("adminId") Long adminId) {
+        return dispatcherService.getDispatcherId(adminId);
+    }
+
+
+    /**
+     * 一次性解除司机和车辆的多条关系
+     *
+     * @param ids 司机的主键 id
+     * @return 成功的记录数
+     */
+    @DeleteMapping("/deleteDispatcherByIds")
+    public Integer deleteDispatcherByAdminIds(@RequestBody Set<Long> ids) {
+        return dispatcherService.deleteDispatcherByAdminIds(ids);
     }
 
 }

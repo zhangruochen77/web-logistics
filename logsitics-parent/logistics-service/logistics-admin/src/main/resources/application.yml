@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.195.130
+        server-addr: 192.168.195.130:8848
   datasource:
     url: jdbc:mysql://localhost:3306/logistics_admin?characterEncoding=utf-8&useSSL=false
     username: root
@@ -16,6 +16,8 @@ spring:
   redis:
     host: 192.168.195.130
     port: 6379
+    database: 0
+    timeout: 5000ms
 
 mybatis-plus:
   global-config:

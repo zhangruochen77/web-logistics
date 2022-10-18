@@ -48,4 +48,13 @@ public interface OrderHistoryService {
      * @param orderIds
      */
     void addRemoveCount(Long[] orderIds);
+
+    /**
+     * 管理员分页查看历史订单信息
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    Map<String, Object> pageFindManage(Integer page, Integer limit);
 }

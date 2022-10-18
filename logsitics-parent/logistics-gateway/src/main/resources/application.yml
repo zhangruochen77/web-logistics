@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.195.130:8848
+        server-addr: localhost:8848
 
     gateway:
       enabled: true # 启用网关功能

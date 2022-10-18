@@ -2,9 +2,13 @@ package com.cly.service;
 
 import com.cly.pojo.admin.User;
 import com.cly.vo.admin.RegistryParams;
+import com.cly.vo.admin.UserNamePhone;
 import com.cly.vo.admin.UserVo;
 import com.cly.web.param.PasswordParams;
 import com.cly.web.param.PhoneParams;
+
+import java.util.Map;
+import java.util.Set;
 
 public interface UserService {
 
@@ -51,4 +55,21 @@ public interface UserService {
      * @return
      */
     User getUserById(Long id);
+
+
+    /**
+     * 获取用户信息列表
+     *
+     * @param ids
+     * @return
+     */
+    Map<Long, String> listUserByIds(Set<Long> ids);
+
+    /**
+     * 获取用户的名称和手机号信息
+     *
+     * @param id 用户主键
+     * @return
+     */
+    UserNamePhone getUserNamePhone(Long id);
 }

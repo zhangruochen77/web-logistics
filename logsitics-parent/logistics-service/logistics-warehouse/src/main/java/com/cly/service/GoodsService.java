@@ -138,4 +138,12 @@ public interface GoodsService {
      */
     Map<Long, GoodsDispatcherPageVo> listGoodsDispatcherPageVoByIds(Set<Long> ids);
 
+    /**
+     * 返回提供商品名称和图片地址
+     *
+     * @param id 商品 id
+     * @return
+     */
+    GoodsNameImgVo getOrderNameImgById(Long id);
+
 }

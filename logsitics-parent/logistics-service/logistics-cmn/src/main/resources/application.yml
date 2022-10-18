@@ -16,9 +16,11 @@ spring:
       discovery:
         server-addr: 192.168.195.130:8848
 
-  redis:   # redis 缓存配置
+  redis:
     host: 192.168.195.130
     port: 6379
+    database: 0
+    timeout: 5000ms
 
 mybatis-plus:
   configuration:

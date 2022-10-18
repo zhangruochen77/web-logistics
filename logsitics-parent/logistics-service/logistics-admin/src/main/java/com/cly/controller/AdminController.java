@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/log/admin/admin")
@@ -125,6 +126,28 @@ public class AdminController {
     public Result updateInfo(@RequestBody AdminInfoParams params) {
         boolean res = adminService.updateInfo(params);
         return res ? Result.success(200, "更新成功！") : Result.fail("更新失败");
+    }
+
+    /**
+     * 查看所有管理员信息
+     *
+     * @return
+     */
+    @GetMapping("/listAdmin")
+    public Result listAdmin() {
+        return Result.success(adminService.listAdmin());
+    }
+
+
+    /**
+     * 多 id 查找用户
+     *
+     * @param adminIds
+     * @return
+     */
+    @PostMapping("/listAdminByArray")
+    public Map<Long, String> listAdminByArray(@RequestBody Long[] adminIds) {
+        return adminService.listAdminByArray(adminIds);
     }
 
 }

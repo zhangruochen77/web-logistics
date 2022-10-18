@@ -20,6 +20,8 @@ spring:
   redis:
     host: 192.168.195.130
     port: 6379
+    database: 0
+    timeout: 5000ms
 
 # 七牛云密钥
 qiniu:

@@ -1,7 +1,9 @@
 package com.cly.service;
 
+import com.cly.vo.order.OrderManageDetailsVo;
 import com.cly.web.param.CreateOrderParams;
 
+import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
@@ -78,4 +80,22 @@ public interface OrderService {
      * @return
      */
     void userSureOrder(Long orderId);
+
+    /**
+     * 管理员一次性查看多个正在执行的订单信息
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    Map<String, Object> listOrder(Integer page, Integer limit);
+
+    /**
+     * 获取订单的当前状态下的详细信息
+     *
+     * @param id 订单编号
+     * @return 订单详细信息
+     */
+    OrderManageDetailsVo orderDetailById(Long id);
+
 }

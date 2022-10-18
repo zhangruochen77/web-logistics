@@ -90,4 +90,28 @@ public class OrderController {
         return Result.success("操作成功");
     }
 
+
+    /**
+     * 管理员一次查看多个出库订单 正在执行的订单
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @GetMapping("/listOrder/{page}/{limit}")
+    public Result listOrder(@PathVariable("page") Integer page,
+                            @PathVariable("limit") Integer limit) {
+        return Result.success(orderService.listOrder(page, limit));
+    }
+
+    /**
+     * 获取订单的当前状态下的详细信息
+     *
+     * @param id 订单编号
+     * @return 订单详细信息
+     */
+    @GetMapping("/order/detail/{id}")
+    public Result orderDetailById(@PathVariable("id") Long id) {
+        return Result.success(orderService.orderDetailById(id));
+    }
 }

@@ -8,6 +8,7 @@ import com.cly.pojo.admin.User;
 import com.cly.service.LoginInfoService;
 import com.cly.service.UserService;
 import com.cly.vo.admin.RegistryParams;
+import com.cly.vo.admin.UserNamePhone;
 import com.cly.vo.admin.UserVo;
 import com.cly.web.MD5Util;
 import com.cly.web.RedisKeyUtils;
@@ -20,6 +21,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -153,6 +157,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserById(Long id) {
         return baseMapper.selectById(id);
+    }
+
+    /**
+     * 获取用户信息列表
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public Map<Long, String> listUserByIds(Set<Long> ids) {
+        Map<Long, String> map = new HashMap<>(ids.size() << 1);
+        baseMapper.selectBatchIds(ids).forEach(item -> {
+            map.put(item.getId(), item.getUsername());
+        });
+
+        return map;
+    }
+
+    /**
+     * 获取用户的名称和手机号信息
+     *
+     * @param id 用户主键
+     * @return
+     */
+    @Override
+    public UserNamePhone getUserNamePhone(Long id) {
+        User user = baseMapper.selectById(id);
+        return userToUserNamePhone(user);
+    }
+
+    /**
+     * 参数转换
+     *
+     * @param user
+     * @return
+     */
+    private UserNamePhone userToUserNamePhone(User user) {
+        UserNamePhone u = new UserNamePhone();
+        u.setId(user.getId());
+        u.setUsername(user.getUsername());
+        u.setPhone(user.getPhone());
+        return u;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.cly.controller;
 
 import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
+import com.cly.vo.warehouse.GoodsNameImgVo;
 import com.cly.vo.warehouse.GoodsDispatcherPageVo;
 import com.cly.vo.warehouse.GoodsQueryVo;
 import com.cly.vo.warehouse.GoodsVo;
@@ -48,6 +49,17 @@ public class GoodsController {
     @GetMapping("/get/{id}")
     public Result getById(@PathVariable Long id) {
         return Result.success(goodsService.getById(id));
+    }
+
+    /**
+     * 提供给远程调用获取单个商品信息的接口
+     *
+     * @param id 商品 id
+     * @return 商品详细信息
+     */
+    @GetMapping("/getOrderById/{id}")
+    public GoodsNameImgVo getOrderNameImgById(@PathVariable("id") Long id) {
+        return goodsService.getOrderNameImgById(id);
     }
 
 

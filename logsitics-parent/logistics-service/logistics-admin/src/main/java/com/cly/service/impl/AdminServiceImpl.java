@@ -10,6 +10,7 @@ import com.cly.pojo.cmn.Role;
 import com.cly.service.AdminService;
 import com.cly.service.LoginInfoService;
 import com.cly.vo.admin.AdminInfoParams;
+import com.cly.vo.admin.AdminInfoVo;
 import com.cly.vo.admin.AdminVo;
 import com.cly.web.MD5Util;
 import com.cly.web.RedisKeyUtils;
@@ -25,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -305,6 +303,25 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         }
 
         return false;
+    }
+
+    /**
+     * 获取所有管理员的信息
+     *
+     * @return
+     */
+    @Override
+    public List<AdminInfoVo> listAdmin() {
+        List<Admin> admins = baseMapper.selectList(new LambdaQueryWrapper<Admin>().notIn(Admin::getRoleId, 3));
+        List<AdminInfoVo> vos = new ArrayList<>(admins.size());
+        admins.forEach(item -> {
+            AdminInfoVo vo = new AdminInfoVo();
+            vo.setId(item.getId().toString());
+            vo.setUsername(item.getUsername() + " " + item.getName());
+            vos.add(vo);
+        });
+
+        return vos;
     }
 
     /**

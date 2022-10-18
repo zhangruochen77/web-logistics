@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cly.dao.DispatcherMapper;
-import com.cly.exception.LogException;
 import com.cly.pojo.admin.Dispatcher;
 import com.cly.service.DispatcherService;
 import com.cly.vo.admin.DispatcherVo;
@@ -14,6 +13,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +23,7 @@ public class DispatcherServiceImpl extends ServiceImpl<DispatcherMapper, Dispatc
     /**
      * 解除司机和车辆的关系
      *
-     * @param id
+     * @param id 主键 id
      * @return
      */
     @Override
@@ -60,17 +60,17 @@ public class DispatcherServiceImpl extends ServiceImpl<DispatcherMapper, Dispatc
      * 添加车辆和司机的关系
      *
      * @param carId
-     * @param dispatcherId
+     * @param id
      * @return
      */
     @Override
-    public Boolean relateCarAndDispatcher(Long carId, Long dispatcherId) {
-        Dispatcher dispatcher = baseMapper.selectById(dispatcherId);
+    public Boolean relateCarAndDispatcher(Long carId, Long id) {
+        Dispatcher dispatcher = baseMapper.selectById(id);
         if (!ObjectUtils.isEmpty(dispatcher.getCarId())) {
-            throw new LogException("司机已搭配车辆");
+            return false;
         }
 
-        return baseMapper.update(null, new LambdaUpdateWrapper<Dispatcher>().set(Dispatcher::getCarId, carId).eq(Dispatcher::getId, dispatcherId)) == 1;
+        return baseMapper.update(null, new LambdaUpdateWrapper<Dispatcher>().set(Dispatcher::getCarId, carId).eq(Dispatcher::getId, id)) == 1;
     }
 
     /**
@@ -88,6 +88,29 @@ public class DispatcherServiceImpl extends ServiceImpl<DispatcherMapper, Dispatc
 
             return vo;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取司机和车辆表关联的id信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Long getDispatcherId(Long id) {
+        Dispatcher dispatcher = baseMapper.selectOne(new LambdaQueryWrapper<Dispatcher>().eq(Dispatcher::getId, id));
+        return dispatcher.getId();
+    }
+
+    /**
+     * 一次性解除司机和车辆的多条关系
+     *
+     * @param ids 司机的主键 id
+     * @return 成功的记录数
+     */
+    @Override
+    public Integer deleteDispatcherByAdminIds(Set<Long> ids) {
+        return baseMapper.update(null, new LambdaUpdateWrapper<Dispatcher>().set(Dispatcher::getCarId, null).in(Dispatcher::getId, ids));
     }
 
 }

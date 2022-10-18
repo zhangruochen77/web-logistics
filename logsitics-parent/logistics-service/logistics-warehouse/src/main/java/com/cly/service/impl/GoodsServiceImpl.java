@@ -454,6 +454,33 @@ public class GoodsServiceImpl extends
     }
 
     /**
+     * 返回提供商品名称和图片地址
+     *
+     * @param id 商品 id
+     * @return
+     */
+    @Override
+    public GoodsNameImgVo getOrderNameImgById(Long id) {
+        Goods goods = baseMapper.selectById(id);
+
+        return goodsToGoodsNameImgVo(goods);
+    }
+
+    /**
+     * 转化操作
+     *
+     * @param goods
+     * @return
+     */
+    private GoodsNameImgVo goodsToGoodsNameImgVo(Goods goods) {
+        GoodsNameImgVo vo = new GoodsNameImgVo();
+        vo.setId(goods.getId());
+        vo.setImg(goods.getImg());
+        vo.setName(goods.getName());
+        return vo;
+    }
+
+    /**
      * 转化为派送员查看订单的操作
      *
      * @param item

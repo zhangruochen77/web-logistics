@@ -2,6 +2,7 @@ package com.cly.service;
 
 import com.cly.pojo.admin.Admin;
 import com.cly.vo.admin.AdminInfoParams;
+import com.cly.vo.admin.AdminInfoVo;
 import com.cly.vo.admin.AdminVo;
 import com.cly.web.param.PasswordParams;
 import com.cly.web.param.PhoneParams;
@@ -96,4 +97,11 @@ public interface AdminService {
      * @return
      */
     boolean updateInfo(AdminInfoParams params);
+
+    /**
+     * 获取所有管理员的信息
+     *
+     * @return
+     */
+    List<AdminInfoVo> listAdmin();
 }

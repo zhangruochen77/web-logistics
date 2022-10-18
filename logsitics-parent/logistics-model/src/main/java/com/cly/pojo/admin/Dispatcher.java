@@ -14,8 +14,6 @@ public class Dispatcher {
 
     private Long id;
 
-    private Long adminId;
-
     private String name;
 
     private Long carId;
