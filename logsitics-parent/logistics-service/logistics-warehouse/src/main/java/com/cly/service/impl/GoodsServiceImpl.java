@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cly.dao.GoodsMapper;
+import com.cly.exception.LogException;
 import com.cly.feign.WareHouseOrderFeign;
 import com.cly.feign.WarehouseAdminFeign;
 import com.cly.feign.WarehouseCmnFeign;
@@ -18,6 +19,7 @@ import com.cly.web.ThreadLocalAdminUtils;
 import com.cly.web.TokenUtils;
 import com.cly.web.param.CreateOrderParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -41,6 +43,9 @@ public class GoodsServiceImpl extends
 
     @Autowired
     private WareHouseOrderFeign wareHouseOrderFeign;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 分页查询商品
@@ -187,10 +192,13 @@ public class GoodsServiceImpl extends
 
 
         if (1 == row) {
-            // TODO: 2022/9/12 redis 当中获取操作员的 id 值
-            Long adminId = 1L;  // 假定的操作员 id
+            String token = ThreadLocalAdminUtils.get();
+            Long userId = TokenUtils.getId(token);
+            if (ObjectUtils.isEmpty(userId)) {
+                throw new LogException("用户未登录");
+            }
 
-            int res = inOrderService.addRecord(id, number, adminId);
+            int res = inOrderService.addRecord(id, number, userId);
             return 1 == res ? true : false;
         }
 

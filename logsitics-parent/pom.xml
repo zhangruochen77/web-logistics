@@ -81,8 +81,6 @@
 
             <!-- redis 依赖 -->
 
-
-
             <!-- fast json 依赖 -->
             <dependency>
                 <groupId>com.alibaba</groupId>

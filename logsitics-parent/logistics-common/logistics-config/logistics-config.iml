@@ -108,6 +108,7 @@
     <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.43.Final" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.3.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.47" level="project" />
     <orderEntry type="module" module-name="logistics-utils" />
     <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.10.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
