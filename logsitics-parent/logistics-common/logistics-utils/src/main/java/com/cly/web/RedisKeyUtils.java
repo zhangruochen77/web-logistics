@@ -1,5 +1,6 @@
 package com.cly.web;
 
+import java.security.PublicKey;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,6 +19,10 @@ public final class RedisKeyUtils {
     private static final String USER_KEY = "user:";
     public static final long USER_EXP_TIME = 180_0000L;
     public static final TimeUnit USER_EXP_TIME_UTIL = TimeUnit.SECONDS;
+
+    private static final String PAGE_GOODS_KEY = "goods:";
+    public static final long PAGE_GOODS_EXP = 600;
+    public static final TimeUnit PAGE_GOODS_EXP_UTIL = TimeUnit.SECONDS;
 
 
     /**
@@ -49,4 +54,5 @@ public final class RedisKeyUtils {
     public static final String createUserKey(Long id) {
         return USER_KEY + id;
     }
+
 }

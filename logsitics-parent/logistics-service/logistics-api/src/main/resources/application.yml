@@ -25,12 +25,12 @@ spring:
 
 # 七牛云密钥
 qiniu:
-  accessKey: 0e7dyZOoNyOiIYbCZZpmmbcfE-rWd105c9sZ9TVG
-  accessSecretKey: TNBFLL3twMSUoKuI-o6YmpJoG6cxtVBXeNV7exlT
+  accessKey: xxx
+  accessSecretKey: xxx
 # 容联云密钥
 cloopen:
   serverIp: app.cloopen.com
   serverPort: 8883
-  appId: 8aaf070882ede8b301832a26bb000b21  # 管理控制台中的 appId
-  accountSId: 8aaf070882ede8b301832a26ba0f0b1a # 开发者id
-  accountToken: 850b190e300249c7bd7db62af74dda54 # 开发者密钥
+  appId: xxx  # 管理控制台中的 appId
+  accountSId: xxx # 开发者id
+  accountToken: xxx # 开发者密钥

@@ -14,6 +14,7 @@ import com.cly.pojo.warehouse.Goods;
 import com.cly.service.GoodsService;
 import com.cly.service.InOrderService;
 import com.cly.vo.warehouse.*;
+import com.cly.web.RedisKeyUtils;
 import com.cly.web.Result;
 import com.cly.web.ThreadLocalAdminUtils;
 import com.cly.web.TokenUtils;
@@ -224,8 +225,6 @@ public class GoodsServiceImpl extends
                 .eq(Goods::getNumber, old)
                 .eq(Goods::getId, id));
 
-        // TODO: 2022/9/12 生成出货订单
-
         return 1 == row ? true : false;
     }
 
@@ -241,7 +240,6 @@ public class GoodsServiceImpl extends
         // 删除入库订单信息
         inOrderService.deleteByGoodsId(id);
 
-        // TODO: 2022/9/12 删除出库订单信息
     }
 
     /**
@@ -256,7 +254,6 @@ public class GoodsServiceImpl extends
         // 删除入库订单信息
         inOrderService.deleteByGoodsIds(ids);
 
-        // TODO: 2022/9/12 删除出库订单信息
 
     }
 
